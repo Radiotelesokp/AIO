@@ -1,0 +1,28 @@
+# Środowisko wirtualne
+venv/
+.venv/
+.env/
+env/
+
+# Pliki Pythona
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Logi i tymczasowe pliki
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+
+# Konfiguracje IDE/editora
+.vscode/
+.idea/
+*.code-workspace
+
+# Pliki Dockerowe
+*.tar

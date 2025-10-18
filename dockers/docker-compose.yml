@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ../
+      dockerfile: dockers/Dockerfile_backend
+    depends_on:
+      - database
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ../
+      dockerfile: dockers/Dockerfile_frontend
+    depends_on:
+      - database
+      - backend
+
+  database:
+    container_name: database
+    build:
+      dockerfile: Dockerfile_database
+
+

@@ -1,0 +1,23 @@
+# Ignoruj środowisko wirtualne
+venv/
+.venv/
+.env/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignoruj pliki tymczasowe i systemowe
+*.swp
+*.swo
+*.DS_Store
+*.log
+
+# Ignoruj pliki Gita
+.git
+.gitignore
+
+# Ignoruj lokalne konfiguracje IDE
+.vscode/
+.idea/

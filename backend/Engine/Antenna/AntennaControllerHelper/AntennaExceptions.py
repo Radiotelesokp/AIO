@@ -1,5 +1,3 @@
-from enum import Enum
-
 class AntennaError(Exception):
     """Podstawowy wyjątek dla błędów anteny"""
 

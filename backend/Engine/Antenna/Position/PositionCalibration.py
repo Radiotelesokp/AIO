@@ -1,17 +1,20 @@
+import logging
 import time
 import json
 import os
 from dataclasses import dataclass, asdict
 from typing import Dict, Any
 
-from backend.Engine.Antena.AntenaController import AntennaLimits, AntennaError
-from backend.Engine.Antena.Position import Position
-from backend.Engine.antenna_controller import DEFAULT_CALIBRATION_FILE
+from backend.Engine.Antenna import DEFAULT_CALIBRATION_FILE
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits, AntennaError
+from backend.Engine.Antenna.Position import Position
 
 
 @dataclass
 class PositionCalibration:
     """Kalibracja pozycji anteny z limitami bezpieczeństwa"""
+    
+    __logger = logging.getLogger(__name__)
 
     azimuth_offset: float = 0.0  # Offset dla azymutu w stopniach
     elevation_offset: float = 0.0  # Offset dla elewacji w stopniach
@@ -83,20 +86,18 @@ class PositionCalibration:
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(calibration_data, f, indent=4, ensure_ascii=False)
 
-            logger.info(f"Kalibracja z limitami zapisana do pliku: {filepath}")
+            self.__logger.info(f"Kalibracja z limitami zapisana do pliku: {filepath}")
 
         except Exception as e:
-            logger.error(f"Błąd podczas zapisywania kalibracji: {e}")
+            self.__logger.error(f"Błąd podczas zapisywania kalibracji: {e}")
             raise AntennaError(f"Nie można zapisać kalibracji do pliku {filepath}: {e}")
 
     @classmethod
-    def load_from_file(
-        cls, filepath: str = DEFAULT_CALIBRATION_FILE
-    ) -> "PositionCalibration":
+    def load_from_file(self, cls, filepath: str = DEFAULT_CALIBRATION_FILE) -> "PositionCalibration":
         """Wczytuje kalibrację i limity z pliku JSON"""
         try:
             if not os.path.exists(filepath):
-                logger.warning(
+                self.__logger.warning(
                     f"Plik kalibracji {filepath} nie istnieje, używam domyślnych wartości"
                 )
                 return cls()  # Zwróć domyślną kalibrację
@@ -111,7 +112,7 @@ class PositionCalibration:
             ]
             for field in required_fields:
                 if field not in data:
-                    logger.warning(
+                    self.__logger.warning(
                         f"Brak pola '{field}' w pliku kalibracji, używam wartości domyślnej"
                     )
 
@@ -126,13 +127,13 @@ class PositionCalibration:
                 max_elevation_speed=float(data.get("max_elevation_speed", 3.0)),
             )
 
-            logger.info(f"Kalibracja wczytana z pliku: {filepath}")
-            logger.info(
+            self.__logger.info(f"Kalibracja wczytana z pliku: {filepath}")
+            self.__logger.info(
                 f"Parametry kalibracji: "
                 f"az_off={calibration.azimuth_offset:.2f}°, "
                 f"el_off={calibration.elevation_offset:.2f}°"
             )
-            logger.info(
+            self.__logger.info(
                 f"Limity: az({calibration.min_azimuth}°-{calibration.max_azimuth}°), "
                 f"el({calibration.min_elevation}°-{calibration.max_elevation}°)"
             )
@@ -140,10 +141,10 @@ class PositionCalibration:
             return calibration
 
         except json.JSONDecodeError as e:
-            logger.error(f"Błąd parsowania JSON w pliku {filepath}: {e}")
+            self.__logger.error(f"Błąd parsowania JSON w pliku {filepath}: {e}")
             raise AntennaError(f"Nieprawidłowy format pliku kalibracji: {e}")
         except Exception as e:
-            logger.error(f"Błąd podczas wczytywania kalibracji: {e}")
+            self.__logger.error(f"Błąd podczas wczytywania kalibracji: {e}")
             raise AntennaError(f"Nie można wczytać kalibracji z pliku {filepath}: {e}")
 
     def export_to_dict(self) -> Dict[str, Any]:
@@ -151,7 +152,7 @@ class PositionCalibration:
         return asdict(self)
 
     @classmethod
-    def import_from_dict(cls, data: Dict[str, Any]) -> "PositionCalibration":
+    def import_from_dict(self, cls, data: Dict[str, Any]) -> "PositionCalibration":
         """Importuje kalibrację ze słownika"""
         return cls(
             azimuth_offset=float(data.get("azimuth_offset", 0.0)),

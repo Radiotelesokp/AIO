@@ -1,23 +1,42 @@
+import asyncio
 import logging
+from typing import Optional
+
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
-from backend.Engine.antenna_controller import DEFAULT_SPID_PORT, rotctl_zatrzymaj_rotor, sprawdz_rotctl, \
-    DEFAULT_BAUDRATE
+
+from backend.Engine.Antenna import AntennaControllerFactory, DEFAULT_SPID_PORT, DEFAULT_BAUDRATE, AntennaController, \
+    AntennaControllerService
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
+from backend.Engine.Antenna.Model import PositionModel, ObserverLocationModel, StatusResponse, ConnectionConfigModel, \
+    AxisMoveModel, CalibrationModel, AzimuthCalibrationModel, TrackingConfigModel
+from backend.Engine.Antenna.Motor.MotorConfig import MotorConfig
+from backend.Engine.Antenna.Position import Position, PositionCalibration
+
 
 from backend.Engine.AstronomyCalculator import AstronomicalCalculator, ObserverLocation, \
     AstronomicalObjectType, AstronomicalTracker
 
-class EngineService:
+class EngineServiceRest:
     __logger = logging.getLogger(__name__)
+
+    __antenna_controller: Optional[AntennaController] = None
+    __antennaControllerService: AntennaControllerService = None
+    __astro_calculator: Optional[AstronomicalCalculator] = None
+    __current_observer_location: Optional[ObserverLocation] = None
+    __astro_tracker: Optional[AstronomicalTracker] = None
+    __tracking_active: bool = False
+    __tracking_task: Optional[asyncio.Task] = None
+    __current_port: Optional[str] = None
 
     def emergency_stop(self, port = DEFAULT_SPID_PORT, speed: int = DEFAULT_BAUDRATE) -> bool:
         success = False
         self.__logger.warning(f'Emergency stop. Used port for Hamlib: {port}')
 
-        if not sprawdz_rotctl():
+        if not self.__antennaControllerService.check_rotctl():
             self.__logger.error("rotctl (Hamlib) nie jest dostępne w systemie")
         else:
-            result = rotctl_zatrzymaj_rotor(port, speed)
+            result = self.__antennaControllerService.stop_rotor_move_rotctl(port, speed)
 
             if "OK" in result or "STOP" in result:
                 self.__logger.info(f"Successfully stopped: {result.strip()}")
@@ -29,11 +48,10 @@ class EngineService:
 
     def get_status(self):
         """Pobierz aktualny status systemu anteny"""
-        global antenna_controller, current_observer_location
 
-        connected = (antenna_controller is not None and
-                     hasattr(antenna_controller.motor_driver, 'connected') and
-                     antenna_controller.motor_driver.connected)
+        connected = (self.__antenna_controller is not None and
+                     hasattr(self.__antenna_controller.motor_driver, 'connected') and
+                     self.__antenna_controller.motor_driver.connected)
         current_position = None
         is_moving = False
         last_error = None
@@ -41,21 +59,21 @@ class EngineService:
         if connected:
             try:
                 # Użyj get_current_position() z kalibracją zamiast raw current_position
-                pos = antenna_controller.get_current_position(apply_reverse_calibration=True)
+                pos = self.__antenna_controller.get_current_position(apply_reverse_calibration=True)
                 if pos:
                     current_position = PositionModel(azimuth=pos.azimuth, elevation=pos.elevation)
-                is_moving = antenna_controller.state == AntennaState.MOVING
+                is_moving = self.__antenna_controller.state == AntennaState.MOVING
             except Exception as e:
                 last_error = str(e)
                 self.__logger.error(f"Błąd pobierania statusu: {e}")
 
         observer_loc = None
-        if current_observer_location:
+        if self.__current_observer_location:
             observer_loc = ObserverLocationModel(
-                latitude=current_observer_location.latitude,
-                longitude=current_observer_location.longitude,
-                elevation=current_observer_location.elevation,
-                name=current_observer_location.name
+                latitude=self.__current_observer_location.latitude,
+                longitude=self.__current_observer_location.longitude,
+                elevation=self.__current_observer_location.elevation,
+                name=self.__current_observer_location.name
             )
 
         return StatusResponse(
@@ -64,42 +82,40 @@ class EngineService:
             is_moving=is_moving,
             last_error=last_error,
             observer_location=observer_loc,
-            port=current_port
+            port=self.__current_port
         )
 
     def connect_antenna(self, config: ConnectionConfigModel):
         """Nawiąż połączenie z anteną"""
-        global antenna_controller, current_port
-
         try:
             if config.use_simulator:
                 self.__logger.info("Łączę z symulatorem...")
-                antenna_controller = AntennaControllerFactory.create_simulator_controller(
+                self.__antenna_controller = AntennaControllerFactory.create_simulator_controller(
                     simulation_speed=2000.0,
                     motor_config=MotorConfig()
                 )
-                current_port = "Symulator"
+                self.__current_port = "Symulator"
             else:
                 port = config.port
                 if not port:
                     # Użyj domyślnego portu lub najlepszego dostępnego
                     self.__logger.info("Szukam najlepszego portu SPID...")
-                    port = get_best_spid_port()
+                    port = self.__antennaControllerService.get_best_spid_port()
                     self.__logger.info(f"Wybrany port: {port}")
 
                 self.__logger.info(f"Łączę z portem {port}...")
-                antenna_controller = AntennaControllerFactory.create_spid_controller(
+                self.__antenna_controller = AntennaControllerFactory.create_spid_controller(
                     port=port,
                     baudrate=config.baudrate,
                     motor_config=MotorConfig()
                 )
-                current_port = port
+                self.__current_port = port
 
             # Inicjalizuj kontroler
-            antenna_controller.initialize()
+            self.__antenna_controller.initialize()
 
             self.__logger.info("Połączenie nawiązane pomyślnie")
-            return {"status": "connected", "port": current_port, "simulator": config.use_simulator}
+            return {"status": "connected", "port": self.__current_port, "simulator": config.use_simulator}
 
         except Exception as e:
             self.__logger.error(f"Błąd połączenia: {e}")
@@ -108,12 +124,10 @@ class EngineService:
 
     def disconnect_antenna(self):
         """Rozłącz z anteną"""
-        global antenna_controller, current_port
-
         try:
-            if antenna_controller:
-                antenna_controller.stop()
-                antenna_controller.shutdown()
+            if self.__antenna_controller:
+                self.__antenna_controller.stop()
+                self.__antenna_controller.shutdown()
                 antenna_controller = None
                 current_port = None
 
@@ -126,7 +140,7 @@ class EngineService:
 
     def get_position(self):
         """Pobierz aktualną pozycję anteny (skalibrowaną)"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             # Użyj get_current_position() z kalibracją zamiast raw current_position
@@ -143,7 +157,7 @@ class EngineService:
 
     def set_position(self, position: PositionModel):
         """Ustaw nową pozycję anteny"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             target_pos = Position(position.azimuth, position.elevation)
@@ -158,7 +172,7 @@ class EngineService:
 
     def stop_antenna(self):
         """Natychmiastowe zatrzymanie anteny"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             controller.stop()
@@ -172,18 +186,17 @@ class EngineService:
 
     def set_observer_location(self, location: ObserverLocationModel):
         """Ustaw lokalizację obserwatora dla obliczeń astronomicznych"""
-        global astro_calculator, current_observer_location, astro_tracker
 
         try:
-            current_observer_location = ObserverLocation(
+            self.__current_observer_location = ObserverLocation(
                 latitude=location.latitude,
                 longitude=location.longitude,
                 elevation=location.elevation,
                 name=location.name
             )
 
-            astro_calculator = AstronomicalCalculator(current_observer_location)
-            astro_tracker = AstronomicalTracker(astro_calculator)
+            self.__astro_calculator = AstronomicalCalculator(self.__current_observer_location)
+            self.__astro_tracker = AstronomicalTracker(self.__astro_calculator)
 
             self.__logger.info(f"Ustawiono lokalizację obserwatora: {location.name}")
             return {"status": "set", "location": location.model_dump()}
@@ -195,22 +208,21 @@ class EngineService:
 
     def get_observer_location(self):
         """Pobierz aktualną lokalizację obserwatora"""
-        global current_observer_location
 
-        if current_observer_location is None:
+        if self.__current_observer_location is None:
             raise HTTPException(status_code=404, detail="Lokalizacja obserwatora nie jest ustawiona")
 
         return ObserverLocationModel(
-            latitude=current_observer_location.latitude,
-            longitude=current_observer_location.longitude,
-            elevation=current_observer_location.elevation,
-            name=current_observer_location.name
+            latitude=self.__current_observer_location.latitude,
+            longitude=self.__current_observer_location.longitude,
+            elevation=self.__current_observer_location.elevation,
+            name=self.__current_observer_location.name
         )
 
     def track_object(self, object_name: str, object_type: AstronomicalObjectType = AstronomicalObjectType.SUN):
         """Rozpocznij śledzenie obiektu astronomicznego"""
-        controller = get_antenna_controller()
-        calculator = get_astro_calculator()
+        controller = self.__get_antenna_controller()
+        calculator = self.__get_astro_calculator()
 
         try:
             # Oblicz pozycję obiektu
@@ -249,18 +261,16 @@ class EngineService:
 
     def start_tracking(self, config: TrackingConfigModel):
         """Rozpocznij ciągłe śledzenie obiektu astronomicznego"""
-        global tracking_active, tracking_task
-
-        if tracking_active:
+        if self.__tracking_active:
             raise HTTPException(status_code=400, detail="Śledzenie już jest aktywne. Zatrzymaj je najpierw.")
 
         try:
             # Sprawdź dostępność wymaganych komponentów
-            get_antenna_controller()
-            get_astro_tracker()
+            self.__get_antenna_controller()
+            self.__get_astro_tracker()
 
-            tracking_active = True
-            tracking_task = asyncio.create_task(continuous_tracking_task(config))
+            self.__tracking_active = True
+            self.__tracking_task = asyncio.create_task(self.__continuous_tracking_task(config))
 
             self.__logger.info(f"Rozpoczęto ciągłe śledzenie obiektu: {config.object_name}")
             return {
@@ -271,28 +281,26 @@ class EngineService:
             }
 
         except Exception as e:
-            tracking_active = False
+            self.__tracking_active = False
             self.__logger.error(f"Błąd rozpoczęcia śledzenia: {e}")
             raise HTTPException(status_code=500, detail=f"Błąd rozpoczęcia śledzenia: {str(e)}")
 
 
-    def stop_tracking(self):
+    async def stop_tracking(self):
         """Zatrzymaj śledzenie obiektu"""
-        global tracking_active, tracking_task
-
         try:
-            if tracking_active:
-                tracking_active = False
-                if tracking_task and not tracking_task.done():
-                    tracking_task.cancel()
+            if self.__tracking_active:
+                self.__tracking_active = False
+                if self.__tracking_task and not self.__tracking_task.done():
+                    self.__tracking_task.cancel()
                     try:
-                        await tracking_task
+                        await self.__tracking_task
                     except asyncio.CancelledError:
                         pass
-                tracking_task = None
+                self.__tracking_task = None
 
             # Zatrzymaj też antenę
-            controller = get_antenna_controller()
+            controller = self.__get_antenna_controller()
             controller.stop()
 
             self.__logger.info("Zatrzymano śledzenie")
@@ -306,8 +314,8 @@ class EngineService:
     def get_tracking_status(self):
         """Pobierz aktualny status śledzenia"""
         return {
-            "tracking_active": tracking_active,
-            "task_running": tracking_task is not None and not tracking_task.done() if tracking_task else False
+            "self.__tracking_active": self.__tracking_active,
+            "task_running": self.__tracking_task is not None and not self.__tracking_task.done() if self.__tracking_task else False
         }
 
 
@@ -325,13 +333,8 @@ class EngineService:
     def diagnostic(self):
         """Sprawdź, czy rotctl i SPID działają"""
         try:
-            from antenna_controller import test_spid_connection
-
-            # Test rotctl
-            rotctl_available = sprawdz_rotctl()
-
-            # Test połączenia ze SPID
-            spid_connected = test_spid_connection(DEFAULT_SPID_PORT, DEFAULT_BAUDRATE)
+            rotctl_available = self.__antennaControllerService.check_rotctl()
+            spid_connected = self.__antennaControllerService.test_spid_connection(DEFAULT_SPID_PORT, DEFAULT_BAUDRATE)
 
             return {
                 "rotctl_available": rotctl_available,
@@ -350,7 +353,7 @@ class EngineService:
 
     def get_astronomical_position(self, object_name: str):
         """Pobierz aktualną pozycję obiektu astronomicznego"""
-        calculator = get_astro_calculator()
+        calculator = self.__get_astro_calculator()
 
         try:
             object_name_lower = object_name.lower()
@@ -402,7 +405,7 @@ class EngineService:
 
     def calibrate_azimuth_reference(self, calibration: AzimuthCalibrationModel):
         """Kalibruje punkt referencyjny azymutu (ustala nowe 0°)"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             controller.calibrate_azimuth_reference(
@@ -424,7 +427,7 @@ class EngineService:
 
     def get_calibration(self):
         """Pobierz aktualne parametry kalibracji"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             cal = controller.position_calibration
@@ -440,7 +443,7 @@ class EngineService:
 
     def set_calibration(self, calibration: CalibrationModel):
         """Ustaw parametry kalibracji"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             new_cal = PositionCalibration(
@@ -460,7 +463,7 @@ class EngineService:
 
     def reset_calibration(self):
         """Resetuj kalibrację do wartości domyślnych"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             controller.reset_calibration(save_to_file=True)
@@ -474,7 +477,7 @@ class EngineService:
 
     def move_axis(self, move: AxisMoveModel):
         """Porusz anteną w określonej osi o zadaną wartość"""
-        controller = get_antenna_controller()
+        controller = self.__get_antenna_controller()
 
         try:
             # Użyj skalibrowanej pozycji do obliczeń
@@ -511,3 +514,99 @@ class EngineService:
         except Exception as e:
             self.__logger.error(f"Błąd ruchu w osi: {e}")
             raise HTTPException(status_code=500, detail=f"Błąd ruchu w osi: {str(e)}")
+
+    # Pomocnicze funkcje
+    def __get_antenna_controller(self) -> AntennaController:
+        """Pobiera kontroler anteny lub rzuca wyjątek HTTP jeśli nie jest zainicjalizowany"""
+        if self.__antenna_controller is None:
+            raise HTTPException(status_code=503, detail="Kontroler anteny nie jest zainicjalizowany. Użyj /connect")
+        return self.__antenna_controller
+
+    def __get_astro_calculator(self) -> AstronomicalCalculator:
+        """Pobiera kalkulator astronomiczny lub rzuca wyjątek HTTP jeśli nie jest skonfigurowany"""
+        if self.__astro_calculator is None or self.__current_observer_location is None:
+            raise HTTPException(status_code=503,
+                                detail="Kalkulator astronomiczny nie jest skonfigurowany. Ustaw lokalizację obserwatora")
+        return self.__astro_calculator
+
+    def __get_astro_tracker(self) -> AstronomicalTracker:
+        """Pobiera tracker astronomiczny lub rzuca wyjątek HTTP jeśli nie jest skonfigurowany"""
+        if self.__astro_tracker is None:
+            raise HTTPException(status_code=503,
+                                detail="Tracker astronomiczny nie jest skonfigurowany. Ustaw lokalizację obserwatora")
+        return self.__astro_tracker
+
+    async def __continuous_tracking_task(self, tracking_config: TrackingConfigModel):
+        """Zadanie ciągłego śledzenia obiektu astronomicznego"""
+        self.__logger.info(f"Rozpoczęcie ciągłego śledzenia obiektu: {tracking_config.object_name}")
+
+        try:
+            tracker = self.__get_astro_tracker()
+            controller = self.__get_antenna_controller()
+
+            # Utwórz funkcję śledzenia dla określonego obiektu
+            if tracking_config.object_type == AstronomicalObjectType.SUN:
+                track_function = tracker.track_sun()
+            elif tracking_config.object_type == AstronomicalObjectType.MOON:
+                track_function = tracker.track_moon()
+            elif tracking_config.object_type in [
+                AstronomicalObjectType.MERCURY,
+                AstronomicalObjectType.VENUS,
+                AstronomicalObjectType.MARS,
+                AstronomicalObjectType.JUPITER,
+                AstronomicalObjectType.SATURN,
+                AstronomicalObjectType.URANUS,
+                AstronomicalObjectType.NEPTUNE
+            ]:
+                # Planety
+                track_function = tracker.track_planet(tracking_config.object_type)
+            elif tracking_config.object_type == AstronomicalObjectType.STAR:
+                # Gwiazdy
+                track_function = tracker.track_star(tracking_config.object_name)
+            elif tracking_config.object_type == AstronomicalObjectType.CUSTOM:
+                # Obiekt niestandardowy - wymaga współrzędnych
+                raise HTTPException(status_code=400,
+                                    detail="Śledzenie obiektów niestandardowych wymaga podania współrzędnych")
+            else:
+                # Próba automatycznego rozpoznania typu na podstawie nazwy
+                object_name_lower = tracking_config.object_name.lower()
+                if object_name_lower == "sun":
+                    track_function = tracker.track_sun()
+                elif object_name_lower == "moon":
+                    track_function = tracker.track_moon()
+                elif object_name_lower in ["mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune"]:
+                    planet_type = AstronomicalObjectType(object_name_lower)
+                    track_function = tracker.track_planet(planet_type)
+                else:
+                    # Domyślnie traktuj jako gwiazdę
+                    track_function = tracker.track_star(tracking_config.object_name)
+
+            while self.__tracking_active:
+                try:
+                    # Pobierz aktualną pozycję obiektu
+                    target_position = track_function()
+
+                    if target_position is None:
+                        self.__logger.warning(f"Obiekt {tracking_config.object_name} jest poza zasięgiem")
+                        break
+
+                    self.__logger.info(
+                        f"Śledzenie {tracking_config.object_name}: Az={target_position.azimuth:.2f}°, El={target_position.elevation:.2f}°")
+
+                    # Po prostu przesuń antenę do nowej pozycji co określony czas
+                    controller.move_to(target_position)
+                    self.__logger.info(
+                        f"Przesunięto antenę do pozycji: Az={target_position.azimuth:.2f}°, El={target_position.elevation:.2f}°")
+
+                    # Czekaj przez określony interwał
+                    await asyncio.sleep(tracking_config.update_interval)
+
+                except Exception as e:
+                    self.__logger.error(f"Błąd podczas śledzenia: {e}")
+                    await asyncio.sleep(5)  # Krótsza pauza przy błędzie
+
+        except Exception as e:
+            self.__logger.error(f"Krytyczny błąd śledzenia: {e}")
+        finally:
+            self.__tracking_active = False
+            self.__logger.info(f"Zakończono śledzenie obiektu: {tracking_config.object_name}")

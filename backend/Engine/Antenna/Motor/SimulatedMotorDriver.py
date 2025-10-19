@@ -1,5 +1,10 @@
+import logging
 import time
 from typing import Tuple
+
+from backend.Engine.Antenna.AntennaControllerHelper import CommunicationError
+from backend.Engine.Antenna.Motor import MotorDriver
+
 
 class SimulatedMotorDriver(MotorDriver):
     """Symulator sterownika silnika do testów - operuje bezpośrednio na stopniach"""
@@ -13,16 +18,17 @@ class SimulatedMotorDriver(MotorDriver):
         self.connected = False
         self.is_moving_flag = False
         self.last_move_time = time.time()
+        self.__logger = logging.getLogger("SimulatedMotorDriver")
 
     def connect(self) -> None:
         """Symuluje nawiązanie połączenia"""
         self.connected = True
-        logger.info("Połączono z symulatorem sterownika")
+        self.__logger.info("Połączono z symulatorem sterownika")
 
     def disconnect(self) -> None:
         """Symuluje rozłączenie"""
         self.connected = False
-        logger.info("Rozłączono z symulatorem sterownika")
+        self.__logger.info("Rozłączono z symulatorem sterownika")
 
     def move_to_position(self, azimuth: float, elevation: float) -> None:
         """Symuluje ruch do pozycji w stopniach"""
@@ -34,7 +40,7 @@ class SimulatedMotorDriver(MotorDriver):
         self.is_moving_flag = True
         self.last_move_time = time.time()
 
-        logger.info(f"Symulator: Ruch do pozycji Az={azimuth}°, El={elevation}°")
+        self.__logger.info(f"Symulator: Ruch do pozycji Az={azimuth}°, El={elevation}°")
 
     def get_position(self) -> Tuple[float, float]:
         """Zwraca aktualną pozycję w stopniach z symulacją ruchu"""
@@ -75,7 +81,7 @@ class SimulatedMotorDriver(MotorDriver):
             and abs(self.current_elevation - self.target_elevation) < 0.1
         ):
             self.is_moving_flag = False
-            logger.debug("Symulator: Ruch zakończony")
+            self.__logger.debug("Symulator: Ruch zakończony")
 
     def stop(self) -> None:
         """Symuluje zatrzymanie ruchu"""
@@ -83,7 +89,7 @@ class SimulatedMotorDriver(MotorDriver):
         # Ustaw cele na aktualną pozycję
         self.target_azimuth = self.current_azimuth
         self.target_elevation = self.current_elevation
-        logger.info("Symulator: Ruch zatrzymany")
+        self.__logger.info("Symulator: Ruch zatrzymany")
 
     def is_moving(self) -> bool:
         """Sprawdza czy symulator jest w ruchu"""

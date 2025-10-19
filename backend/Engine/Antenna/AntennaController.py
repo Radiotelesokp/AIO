@@ -1,10 +1,18 @@
+import logging
 import threading
 import time
 from typing import Optional, Dict, Any, Callable
 
+from backend.Engine.Antenna import DEFAULT_CALIBRATION_FILE
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits, AntennaState, AntennaError, SafetyError, \
+    PositionError
+from backend.Engine.Antenna.Motor import MotorDriver, MotorConfig
+from backend.Engine.Antenna.Position import Position, PositionCalibration
+
 
 class AntennaController:
     """Główny kontroler anteny radioteleskopu"""
+    __logger = logging.getLogger(__name__)
 
     def __init__(
             self,
@@ -31,10 +39,10 @@ class AntennaController:
         # Ustaw limity - używaj limitów z kalibracji, jeśli nie podano innych
         if limits is not None:
             self.limits = limits
-            logger.info("Używam podanych limitów bezpieczeństwa")
+            self.__logger.info("Używam podanych limitów bezpieczeństwa")
         else:
             self.limits = self.position_calibration.get_antenna_limits()
-            logger.info("Używam limitów bezpieczeństwa z pliku kalibracji")
+            self.__logger.info("Używam limitów bezpieczeństwa z pliku kalibracji")
 
         self.state = AntennaState.IDLE
         self.current_position = Position(0.0, 0.0)
@@ -50,7 +58,7 @@ class AntennaController:
             self.motor_driver.connect()
             self._start_monitoring()
             self.state = AntennaState.IDLE
-            logger.info("System anteny zainicjalizowany")
+            self.__logger.info("System anteny zainicjalizowany")
         except Exception as e:
             self.state = AntennaState.ERROR
             raise AntennaError(f"Błąd inicjalizacji: {e}")
@@ -62,7 +70,7 @@ class AntennaController:
         if self._monitoring_thread and self._monitoring_thread.is_alive():
             self._monitoring_thread.join()
         self.motor_driver.disconnect()
-        logger.info("System anteny wyłączony")
+        self.__logger.info("System anteny wyłączony")
 
     def _start_monitoring(self) -> None:
         """Uruchamia wątek monitorowania pozycji"""
@@ -89,7 +97,7 @@ class AntennaController:
                         and not self.motor_driver.is_moving()
                 ):
                     self.state = AntennaState.IDLE
-                    logger.info(f"Ruch zakończony. Pozycja: {self.current_position}")
+                    self.__logger.info(f"Ruch zakończony. Pozycja: {self.current_position}")
 
                 # Wywołaj callback jeśli zdefiniowany
                 if self.update_callback:
@@ -100,12 +108,12 @@ class AntennaController:
 
             except Exception as e:
                 consecutive_errors += 1
-                logger.error(f"Błąd monitorowania: {e}")
+                self.__logger.error(f"Błąd monitorowania: {e}")
 
                 # Jeśli wystąpiło zbyt wiele błędów pod rząd, ustaw stan błędu
                 if consecutive_errors >= max_consecutive_errors:
                     self.state = AntennaState.ERROR
-                    logger.error(
+                    self.__logger.error(
                         f"Zbyt wiele błędów monitorowania pod rząd ({consecutive_errors})"
                     )
 
@@ -152,7 +160,7 @@ class AntennaController:
                 calibrated_position.azimuth, calibrated_position.elevation
             )
 
-            logger.info(
+            self.__logger.info(
                 f"Rozpoczęto ruch do pozycji: {position} (skalibrowana: {calibrated_position})"
             )
 
@@ -181,20 +189,20 @@ class AntennaController:
         # Zaktualizuj limity na podstawie kalibracji jeśli wymagane
         if update_limits:
             self.limits = calibration.get_antenna_limits()
-            logger.info("Limity bezpieczeństwa zaktualizowane na podstawie kalibracji")
+            self.__logger.info("Limity bezpieczeństwa zaktualizowane na podstawie kalibracji")
 
         if save_to_file:
             try:
                 calibration.save_to_file(self.calibration_file)
-                logger.info("Kalibracja została automatycznie zapisana do pliku")
+                self.__logger.info("Kalibracja została automatycznie zapisana do pliku")
             except Exception as e:
-                logger.warning(f"Nie udało się zapisać kalibracji do pliku: {e}")
+                self.__logger.warning(f"Nie udało się zapisać kalibracji do pliku: {e}")
 
-        logger.info(
+        self.__logger.info(
             f"Ustawiono kalibrację pozycji: offset_az={calibration.azimuth_offset}°, "
             f"offset_el={calibration.elevation_offset}°"
         )
-        logger.info(
+        self.__logger.info(
             f"Limity: az({calibration.min_azimuth}°-{calibration.max_azimuth}°), "
             f"el({calibration.min_elevation}°-{calibration.max_elevation}°)"
         )
@@ -203,7 +211,7 @@ class AntennaController:
         """Zapisuje aktualną kalibrację do pliku"""
         file_to_use = filepath or self.calibration_file
         self.position_calibration.save_to_file(file_to_use)
-        logger.info(f"Kalibracja zapisana do {file_to_use}")
+        self.__logger.info(f"Kalibracja zapisana do {file_to_use}")
 
     def load_calibration(
             self, filepath: Optional[str] = None, update_limits: bool = True
@@ -215,11 +223,11 @@ class AntennaController:
         # Zaktualizuj limity na podstawie wczytanej kalibracji
         if update_limits:
             self.limits = self.position_calibration.get_antenna_limits()
-            logger.info(
+            self.__logger.info(
                 "Limity bezpieczeństwa zaktualizowane na podstawie wczytanej kalibracji"
             )
 
-        logger.info(f"Kalibracja wczytana z {file_to_use}")
+        self.__logger.info(f"Kalibracja wczytana z {file_to_use}")
 
     def reset_calibration(
             self, save_to_file: bool = True, update_limits: bool = True
@@ -230,16 +238,16 @@ class AntennaController:
         # Zaktualizuj limity na podstawie domyślnej kalibracji
         if update_limits:
             self.limits = self.position_calibration.get_antenna_limits()
-            logger.info("Limity bezpieczeństwa zresetowane do wartości domyślnych")
+            self.__logger.info("Limity bezpieczeństwa zresetowane do wartości domyślnych")
 
         if save_to_file:
             try:
                 self.save_calibration()
-                logger.info("Zresetowana kalibracja została zapisana do pliku")
+                self.__logger.info("Zresetowana kalibracja została zapisana do pliku")
             except Exception as e:
-                logger.warning(f"Nie udało się zapisać zresetowanej kalibracji: {e}")
+                self.__logger.warning(f"Nie udało się zapisać zresetowanej kalibracji: {e}")
 
-        logger.info("Kalibracja została zresetowana do wartości domyślnych")
+        self.__logger.info("Kalibracja została zresetowana do wartości domyślnych")
 
     def calibrate_azimuth_reference(
             self,
@@ -257,11 +265,11 @@ class AntennaController:
         if save_to_file:
             try:
                 self.save_calibration()
-                logger.info("Kalibracja azymutu została zapisana do pliku")
+                self.__logger.info("Kalibracja azymutu została zapisana do pliku")
             except Exception as e:
-                logger.warning(f"Nie udało się zapisać kalibracji azymutu: {e}")
+                self.__logger.warning(f"Nie udało się zapisać kalibracji azymutu: {e}")
 
-        logger.info(f"Skalibrowano azymut: offset={offset}°")
+        self.__logger.info(f"Skalibrowano azymut: offset={offset}°")
 
     def stop(self) -> None:
         """Zatrzymuje ruch anteny"""
@@ -269,14 +277,14 @@ class AntennaController:
             self.motor_driver.stop()
             self.state = AntennaState.STOPPED
             self.target_position = None
-            logger.info("Ruch anteny zatrzymany")
+            self.__logger.info("Ruch anteny zatrzymany")
         except Exception as e:
             self.state = AntennaState.ERROR
             raise AntennaError(f"Błąd zatrzymania: {e}")
 
     def calibrate(self) -> None:
         """Kalibruje pozycję anteny (powrót do pozycji domowej)"""
-        logger.info("Rozpoczęcie kalibracji...")
+        self.__logger.info("Rozpoczęcie kalibracji...")
         self.state = AntennaState.CALIBRATING
 
         # Powrót do pozycji 0,0
@@ -288,7 +296,7 @@ class AntennaController:
             time.sleep(0.1)
 
         self.state = AntennaState.IDLE
-        logger.info("Kalibracja zakończona")
+        self.__logger.info("Kalibracja zakończona")
 
     def get_status(self) -> Dict[str, Any]:
         """Zwraca pełny status anteny"""
@@ -338,7 +346,7 @@ class AntennaController:
         """Resetuje stan błędu kontrolera"""
         if self.state == AntennaState.ERROR:
             self.state = AntennaState.IDLE
-            logger.info("Stan błędu został zresetowany")
+            self.__logger.info("Stan błędu został zresetowany")
 
     def wait_for_movement(self, timeout: float = 90.0) -> None:
         """
@@ -374,13 +382,13 @@ class AntennaController:
                     # Jeśli antena się porusza (więcej niż 0.2°), zaktualizuj czas ostatniego ruchu
                     if az_moved > 0.2 or el_moved > 0.2:
                         last_movement_time = current_time
-                        logger.debug(f"Wykryto ruch anteny: dAz={az_moved:.1f}°, dEl={el_moved:.1f}°")
+                        self.__logger.debug(f"Wykryto ruch anteny: dAz={az_moved:.1f}°, dEl={el_moved:.1f}°")
 
                 # Sprawdź stan kontrolera - jeśli nie jest w ruchu i pozycja się stabilizowała
                 time_since_movement = current_time - last_movement_time
                 if (self.state != AntennaState.MOVING and
                         time_since_movement > 3.0):  # 3 sekundy bez ruchu dla lepszej stabilności
-                    logger.debug(f"Ruch zakończony - stan: {self.state}, brak ruchu przez {time_since_movement:.1f}s")
+                    self.__logger.debug(f"Ruch zakończony - stan: {self.state}, brak ruchu przez {time_since_movement:.1f}s")
                     break
 
                 # Sprawdź timeout - ale tylko jeśli antena nie porusza się przez ostatnie 10 sekund
@@ -397,5 +405,5 @@ class AntennaController:
             except Exception as e:
                 if isinstance(e, TimeoutError):
                     raise
-                logger.warning(f"Błąd podczas sprawdzania ruchu: {e}")
+                self.__logger.warning(f"Błąd podczas sprawdzania ruchu: {e}")
                 time.sleep(0.5)

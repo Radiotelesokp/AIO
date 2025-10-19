@@ -1,18 +1,20 @@
-import ephem
 from dataclasses import dataclass
 
 @dataclass
 class ObserverLocation:
-    """Lokalizacja obserwatora"""
+    """Observer’s location"""
 
-    latitude: float  # Szerokość geograficzna w stopniach
-    longitude: float  # Długość geograficzna w stopniach
-    elevation: float  # Wysokość n.p.m. w metrach
+    latitude: float  # Geographic latitude in degrees
+    longitude: float  # Geographic longitude in degrees
+    elevation: float  # Elevation above sea level in meters
     name: str = "Unknown"
 
+    def __init__(self, languageHelper):
+        self._ = languageHelper.getTranslatedMessage("AstronomyCalculator")
+
     def __post_init__(self):
-        """Walidacja współrzędnych"""
+        """Coordinates validation"""
         if not (-90 <= self.latitude <= 90):
-            raise ValueError("Szerokość geograficzna musi być w zakresie -90° do +90°")
+            raise ValueError(f"{self._("observer.location.invalid.latitude.error")} {self.latitude}")
         if not (-180 <= self.longitude <= 180):
-            raise ValueError("Długość geograficzna musi być w zakresie -180° do +180°")
+            raise ValueError(f"{self._("observer.location.invalid.longitude.error")} {self.longitude}")

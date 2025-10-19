@@ -3,7 +3,11 @@ import SoapySDR
 import logging
 from fastapi import FastAPI
 import uvicorn
-from backend.Engine.EngineService import EngineService
+
+from backend.Engine.Antenna.Model import AzimuthCalibrationModel, CalibrationModel, AxisMoveModel, TrackingConfigModel, \
+    ObserverLocationModel, PositionModel, ConnectionConfigModel, StatusResponse
+from backend.Engine.AstronomyCalculator import AstronomicalObjectType
+from backend.Engine import EngineServiceRest
 from backend.SDR import SDRService
 
 
@@ -12,9 +16,12 @@ app = FastAPI(title="KN Spectrum - Project Radiotelescope")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+i18n = I18nMiddleware(default_locale='en',locale_path='locales')
+app.add_middleware(i18n)
+
 sdr = None
 sdrService = None
-engineService = EngineService()
+engineService = EngineServiceRest()
 
 
 # Bias Tee endpoints - please don't use that, because we don't have BiasTee in our hardware project
@@ -100,7 +107,7 @@ async def get_astronomical_position(object_name: str):
 
 @app.post("/calibrate_azimuth", summary="Kalibracja referencji azymutu")
 async def calibrate_azimuth_reference(calibration: AzimuthCalibrationModel):
-    return engineService.calibrate_azimuth_reference()
+    return engineService.calibrate_azimuth_reference(calibration)
 
 @app.get("/calibration", summary="Pobierz aktualną kalibrację")
 async def get_calibration():
@@ -108,7 +115,7 @@ async def get_calibration():
 
 @app.post("/calibration", summary="Ustaw kalibrację")
 async def set_calibration(calibration: CalibrationModel):
-    return engineService.set_calibration()
+    return engineService.set_calibration(calibration)
 
 @app.post("/reset_calibration", summary="Resetuj kalibrację")
 async def reset_calibration():

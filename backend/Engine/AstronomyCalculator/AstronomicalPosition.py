@@ -1,29 +1,30 @@
-from backend.Engine.antenna_controller import Position
 from typing import Optional
 from dataclasses import dataclass
+
+from backend.Engine.Antenna.Position import Position
 
 
 @dataclass
 class AstronomicalPosition:
-    """Pozycja astronomiczna obiektu w konwencji rotctl dla SPID"""
+    """Astronomical position of an object in rotctl convention for SPID"""
 
-    azimuth: float  # Azymut w stopniach (0-360, 0 = północ, zgodnie z rotctl)
-    elevation: float  # Elewacja w stopniach (0-90)
-    distance: float  # Odległość w AU (jednostki astronomiczne)
-    ra: float  # Rektascensja w godzinach
-    dec: float  # Deklinacja w stopniach
-    is_visible: bool  # Czy obiekt jest nad horyzontem
-    magnitude: float  # Jasność pozorna (jeśli dostępna)
+    azimuth: float  # Azimuth in degrees (0–360, 0 = north, consistent with rotctl)
+    elevation: float  # Elevation in degrees (0–90)
+    distance: float  # Distance in AU (astronomical units)
+    ra: float  # Right ascension in hours
+    dec: float  # Declination in degrees
+    is_visible: bool  # Whether the object is above the horizon
+    magnitude: float  # Apparent magnitude (if available)
 
     def to_antenna_position(self) -> Optional[Position]:
-        """Konwertuje do pozycji anteny zgodnej z rotctl dla SPID (tylko jeśli obiekt jest widoczny)"""
+        """Converts to antenna position compatible with rotctl for SPID (only if the object is visible)"""
         if not self.is_visible or self.elevation < 0:
             return None
         rotctl_azimuth = self.azimuth
 
-        # Elewacja w waszym systemie: 0° = pion (zenit), 90° = poziom (horyzont)
-        # PyEphem zwraca standardową elewację (0° = horyzont, 90° = zenit)
-        # Więc musimy odwrócić: 90° - elevation_pyephem
+        # Elevation in your system: 0° = vertical (zenith), 90° = horizontal (horizon)
+        # PyEphem returns standard elevation (0° = horizon, 90° = zenith)
+        # Therefore, we need to invert it: 90° - elevation_pyephem
         rotctl_elevation = 90.0 - self.elevation
 
         return Position(azimuth=rotctl_azimuth, elevation=rotctl_elevation)

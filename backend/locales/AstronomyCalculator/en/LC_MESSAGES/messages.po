@@ -1,0 +1,20 @@
+msgid "astronomical.calculator.required.name.star"
+msgstr "For stars, a name or coordinates are required."
+
+msgid "astronomical.calculator.required.name.custom"
+msgstr "For a custom object, coordinates are required."
+
+msgid "astronomical.calculator.unsupported.object.type"
+msgstr "Unsupported object type:"
+
+msgid "astronomical.calculator.star.not.found"
+msgstr "Star not found:"
+
+msgid "astronomical.calculator.bad.planet.name"
+msgstr "Invalid planet name:"
+
+msgid "observer.location.invalid.latitude.error"
+msgstr "Latitude must be in the range -90° to +90°. Current value:"
+
+msgid "observer.location.invalid.longitude.error"
+msgstr "Longitude must be in the range -180° to +180°. Current value:"

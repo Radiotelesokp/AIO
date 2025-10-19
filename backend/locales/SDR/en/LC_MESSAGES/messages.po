@@ -1,0 +1,42 @@
+# Bias-Tee endpoints
+msgid "bias.tee.get.error.message"
+msgstr "Bias-Tee get status error:"
+
+msgid "bias.tee.get.success.message"
+msgstr "Bias-Tee status:"
+
+msgid "bias.tee.set.error.message"
+msgstr "Bias-Tee set status error:"
+
+msgid "bias.tee.set.success.message"
+msgstr "Bias-Tee status set on:"
+
+# Bias-Tee errors
+msgid "bias.tee.unsupported.action"
+msgstr "Unsupported operation Bias-Tee"
+
+# SDR errors
+msgid "spectrum.scanner.convertion.to.float.error"
+msgstr "Conversion to float failed for value:"
+
+msgid "spectrum.scanner.convertion.to.int.error"
+msgstr "Conversion to int failed for value:"
+
+msgid "spectrum.scanner.files.dont.error"
+msgstr "{max_file} or {mean_file} does not exist"
+
+# SDR endpoints
+msgid "sdr.scan.value.error.message"
+msgstr "Please give correct parameters. Error:"
+
+msgid "sdr.scan.unexpected.error.message"
+msgstr "SDR have some problems during receive signal:"
+
+msgid "sdr.scan.success.message"
+msgstr "Send signal successfully."
+
+msgid "sdr.send.value.error.message"
+msgstr "Please give correct parameters. Error:"
+
+msgid "sdr.send.unexpected.error.message"
+msgstr "SDR have some problems during send signal:"

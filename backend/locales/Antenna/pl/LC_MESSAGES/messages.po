@@ -1,0 +1,2 @@
+msgid "Hello"
+msgstr "Dla gwiazd wymagana jest nazwa lub współrzędne"

@@ -1,8 +1,16 @@
+import logging
 import time
 from typing import Tuple
 
+from backend.Engine.Antenna import DEFAULT_BAUDRATE
+from backend.Engine.Antenna.AntennaControlerSerivce import sprawdz_rotctl, rotctl_odczytaj_pozycje,\
+rotctl_ustaw_pozycje, rotctl_zatrzymaj_rotor
+from backend.Engine.Antenna.AntennaControllerHelper import CommunicationError, PositionError
+from backend.Engine.Antenna.Motor import MotorDriver
+
 
 class RotctlMotorDriver(MotorDriver):
+    __logger = logging.getLogger(__name__)
     """Sterownik silnika komunikujący się przez rotctl (Hamlib) z protokołem SPID"""
 
     def __init__(self, port: str, baudrate: int = DEFAULT_BAUDRATE):
@@ -26,21 +34,21 @@ class RotctlMotorDriver(MotorDriver):
                 self.port, self.baudrate
             )
             self.connected = True
-            logger.info(
+            self.__logger.info(
                 f"Połączono z kontrolerem SPID przez rotctl na porcie {self.port} (baudrate: {self.baudrate})"
             )
-            logger.info(
+            self.__logger.info(
                 f"Aktualna pozycja: Az={self.current_azimuth:.1f}°, El={self.current_elevation:.1f}°"
             )
 
         except Exception as e:
-            logger.error(f"Błąd połączenia z SPID przez rotctl: {e}")
+            self.__logger.error(f"Błąd połączenia z SPID przez rotctl: {e}")
             raise CommunicationError(f"Nie można nawiązać połączenia przez rotctl: {e}")
 
     def disconnect(self) -> None:
         """Rozłącza połączenie - rotctl nie wymaga jawnego rozłączania"""
         self.connected = False
-        logger.info("Rozłączono z kontrolerem SPID (rotctl)")
+        self.__logger.info("Rozłączono z kontrolerem SPID (rotctl)")
 
     def get_position(self) -> Tuple[float, float]:
         """Odczytuje aktualną pozycję anteny w stopniach"""
@@ -54,7 +62,7 @@ class RotctlMotorDriver(MotorDriver):
             return self.current_azimuth, self.current_elevation
 
         except Exception as e:
-            logger.error(f"Błąd odczytu pozycji przez rotctl: {e}")
+            self.__logger.error(f"Błąd odczytu pozycji przez rotctl: {e}")
             raise CommunicationError(f"Nie można odczytać pozycji przez rotctl: {e}")
 
     def move_to_position(self, azimuth: float, elevation: float) -> None:
@@ -71,7 +79,7 @@ class RotctlMotorDriver(MotorDriver):
             self.target_elevation = elevation
             self.is_moving_flag = True
 
-            logger.info(
+            self.__logger.info(
                 f"Rotctl: Ustawianie pozycji Az={azimuth:.1f}°, El={elevation:.1f}°"
             )
 
@@ -82,11 +90,11 @@ class RotctlMotorDriver(MotorDriver):
                 self.port, azimuth, elevation, self.baudrate
             )
 
-            logger.info(f"Rotctl: Komenda wysłana. Odpowiedź: {response}")
+            self.__logger.info(f"Rotctl: Komenda wysłana. Odpowiedź: {response}")
 
         except Exception as e:
             self.is_moving_flag = False
-            logger.error(f"Błąd podczas ruchu przez rotctl: {e}")
+            self.__logger.error(f"Błąd podczas ruchu przez rotctl: {e}")
             raise CommunicationError(f"Nie można przesunąć anteny przez rotctl: {e}")
 
     def stop(self) -> None:
@@ -95,13 +103,13 @@ class RotctlMotorDriver(MotorDriver):
             raise CommunicationError("Sterownik rotctl nie jest połączony")
 
         try:
-            logger.info("Rotctl: Zatrzymywanie ruchu anteny")
+            self.__logger.info("Rotctl: Zatrzymywanie ruchu anteny")
             response = rotctl_zatrzymaj_rotor(self.port, self.baudrate)
             self.is_moving_flag = False
-            logger.info(f"Rotctl: Ruch zatrzymany. Odpowiedź: {response}")
+            self.__logger.info(f"Rotctl: Ruch zatrzymany. Odpowiedź: {response}")
 
         except Exception as e:
-            logger.error(f"Błąd podczas zatrzymywania przez rotctl: {e}")
+            self.__logger.error(f"Błąd podczas zatrzymywania przez rotctl: {e}")
             raise CommunicationError(f"Nie można zatrzymać anteny przez rotctl: {e}")
 
     def is_moving(self) -> bool:
@@ -129,14 +137,14 @@ class RotctlMotorDriver(MotorDriver):
 
             if is_at_target:
                 self.is_moving_flag = False
-                logger.info(
+                self.__logger.info(
                     f"Rotctl: Pozycja docelowa osiągnięta Az={current_az:.1f}°, El={current_el:.1f}°"
                 )
 
             return not is_at_target
 
         except Exception as e:
-            logger.warning(f"Błąd sprawdzenia ruchu przez rotctl: {e}")
+            self.__logger.warning(f"Błąd sprawdzenia ruchu przez rotctl: {e}")
             # W razie błędu zakładamy że ruch się zakończył
             self.is_moving_flag = False
             return False

@@ -2,6 +2,7 @@ from typing import Optional
 from dataclasses import dataclass
 
 from backend.Engine.Antenna.Position import Position
+from backend.LanguageHelper import LanguageHelper
 
 
 @dataclass
@@ -15,6 +16,7 @@ class AstronomicalPosition:
     dec: float  # Declination in degrees
     is_visible: bool  # Whether the object is above the horizon
     magnitude: float  # Apparent magnitude (if available)
+    languageHelper: LanguageHelper
 
     def to_antenna_position(self) -> Optional[Position]:
         """Converts to antenna position compatible with rotctl for SPID (only if the object is visible)"""
@@ -27,4 +29,4 @@ class AstronomicalPosition:
         # Therefore, we need to invert it: 90° - elevation_pyephem
         rotctl_elevation = 90.0 - self.elevation
 
-        return Position(azimuth=rotctl_azimuth, elevation=rotctl_elevation)
+        return Position(azimuth=rotctl_azimuth, elevation=rotctl_elevation, languageHelper=self.languageHelper)

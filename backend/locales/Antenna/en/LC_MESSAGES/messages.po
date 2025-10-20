@@ -1,2 +1,69 @@
-msgid "Hello"
-msgstr "Hello"
+msgid "position.azimuth.limit.error"
+msgstr "Azimuth must be in the range 0–360°, received:"
+
+msgid "simulator.motor.is.disconnected"
+msgstr "Simulator is not connected."
+
+msgid "rotctl.motor.hamlib.is.unavailable.error"
+msgstr "Rotctl (Hamlib) is not available on this system."
+
+msgid "rotctl.motor.cannot.connect.via.rotctl.error"
+msgstr "Cannot connect via rotctl:"
+
+msgid "rotctl.motor.driver.disconnected.error"
+msgstr "Rotctl driver is not connected."
+
+msgid "rotctl.motor.cannot.move.antena.error"
+msgstr "Cannot move antenna via rotctl:"
+
+msgid "rotctl.motor.cannot.stop.antena.error"
+msgstr "Cannot stop antenna via rotctl:"
+
+msgid "rotctl.motor.cannot.stop.antena.timeout.error"
+msgstr "Timeout while stopping the rotor via rotctl."
+
+msgid "rotctl.motor.cannot.stop.antena.proc.error"
+msgstr "Problem with process while stopping rotor:"
+
+msgid "rotctl.motor.elevation.out.of.range.error"
+msgstr "Elevation {el:.1f}° is out of allowed range (-90° to +90°)."
+
+msgid "rotctl.motor.setting.position.error"
+msgstr "Rotctl error while setting position Az={normalized_az:.1f}°, El={el:.1f}°: code {code}, error: '{error_msg}'."
+
+msgid "rotctl.motor.communication.error"
+msgstr "Error communicating with rotctl:"
+
+msgid "rotctl.motor.timeout.set.after.all.attempts"
+msgstr "Timeout while setting position with rotctl after all attempts."
+
+msgid "rotctl.motor.incomplete.position.response"
+msgstr "Incomplete rotctl position response:"
+
+msgid "rotctl.motor.reading.position.error"
+msgstr "Error while reading position from rotctl:"
+
+msgid "rotctl.motor.timeout.reading.after.all.attempts"
+msgstr "Timeout while reading position from rotctl after all attempts."
+
+msgid "antenna.initialization.error"
+msgstr "Initialization error:"
+
+msgid "antenna.azimuth.out.of.range.error"
+msgstr "Azimuth {azimuth}° out of limits ({min_azimuth}°–{max_azimuth}°)."
+
+msgid "antenna.elevation.out.of.range.error"
+msgstr "Elevation {el}° out of limits ({min_el}°–{max_el}°)."
+
+msgid "antenna.error.state"
+msgstr "System is in error state - movement not possible."
+
+msgid "antenna.movement.error"
+msgstr "Movement error:"
+
+msgid "antenna.stop.error"
+msgstr "Stop error:"
+
+msgid "antenna.timeout.movement.error"
+msgstr "Movement timeout exceeded ({timeout}s), no movement for {time_site}s."
+

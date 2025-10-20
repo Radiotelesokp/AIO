@@ -1,14 +1,14 @@
 class AntennaError(Exception):
-    """Podstawowy wyjątek dla błędów anteny"""
+    """Base exception for antenna errors"""
 
 
 class CommunicationError(AntennaError):
-    """Błąd komunikacji z sterownikiem"""
+    """Communication error with the controller"""
 
 
 class PositionError(AntennaError):
-    """Błąd pozycjonowania anteny"""
+    """Antenna positioning error"""
 
 
 class SafetyError(AntennaError):
-    """Błąd bezpieczeństwa - przekrocenie limitów"""
+    """Safety error – limits exceeded"""

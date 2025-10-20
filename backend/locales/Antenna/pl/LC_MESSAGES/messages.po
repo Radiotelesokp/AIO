@@ -1,2 +1,5 @@
-msgid "Hello"
-msgstr "Dla gwiazd wymagana jest nazwa lub współrzędne"
+msgid "position.azimuth.limit.error"
+msgstr "Azymut musi być w zakresie 0-360°, otrzymano:"
+
+msgid "simulator.motor.is.disconnected"
+msgstr "Symulator nie jest połączony."

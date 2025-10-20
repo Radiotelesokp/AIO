@@ -9,10 +9,11 @@ class AstronomicalCalculator:
     """Astronomical position calculator"""
 
     def __init__(self, observer_location: ObserverLocation, languageHelper):
-        self.observer_location = observer_location
-        self.observer = ephem.Observer()
-        self._setup_observer()
-        self._ = languageHelper.getTranslatedMessage("AstronomyCalculator")
+        self.__observer_location = observer_location
+        self.__observer = ephem.Observer()
+        self.__setup_observer()
+        self.__languageHelper = languageHelper
+        self._ = self.__languageHelper.getTranslatedMessage("AstronomyCalculator")
 
         # Dictionary of astronomical objects
         # pylint: disable=no-member  # ephem objects exist at runtime
@@ -31,13 +32,13 @@ class AstronomicalCalculator:
         # Cache for stars
         self._star_cache: Dict[str, object] = {}
 
-    def _setup_observer(self):
+    def __setup_observer(self):
         """Configures the observer"""
-        self.observer.lat = math.radians(self.observer_location.latitude)
-        self.observer.lon = math.radians(self.observer_location.longitude)
-        self.observer.elev = self.observer_location.elevation
-        self.observer.pressure = 1013.25  # Atmospheric pressure in hPa
-        self.observer.temp = 15.0  # Temperature in °C
+        self.__observer.lat = math.radians(self.__observer_location.latitude)
+        self.__observer.lon = math.radians(self.__observer_location.longitude)
+        self.__observer.elev = self.__observer_location.elevation
+        self.__observer.pressure = 1013.25  # Atmospheric pressure in hPa
+        self.__observer.temp = 15.0  # Temperature in °C
 
     def get_position(
         self,
@@ -51,7 +52,7 @@ class AstronomicalCalculator:
             observation_time = datetime.now(timezone.utc)
 
         # Set observation time
-        self.observer.date = observation_time.strftime("%Y/%m/%d %H:%M:%S")
+        self.__observer.date = observation_time.strftime("%Y/%m/%d %H:%M:%S")
 
         # Select object
         if object_type == AstronomicalObjectType.STAR:
@@ -77,7 +78,7 @@ class AstronomicalCalculator:
             astronomical_object = self._objects[object_type]
 
         # Calculate position
-        astronomical_object.compute(self.observer)
+        astronomical_object.compute(self.__observer)
 
         # Convert to degrees - PyEphem returns azimuth in astronomical convention
         # (0° = north, 90° = east), which is consistent with rotctl
@@ -97,8 +98,8 @@ class AstronomicalCalculator:
         # Apparent magnitude (if available)
         magnitude = astronomical_object.mag if hasattr(astronomical_object, "mag") else 0.0
 
-        return AstronomicalPosition(azimuth=azimuth, elevation=elevation, distance=distance,
-                                    ra=ra, dec=dec, is_visible=elevation > 0, magnitude=magnitude)
+        return AstronomicalPosition(azimuth=azimuth, elevation=elevation, distance=distance, ra=ra, dec=dec,
+                                    is_visible=elevation > 0, magnitude=magnitude, languageHelper=self.__languageHelper)
 
     def _get_star_by_name(self, star_name: str) -> object:
         """Fetches a star by name from cache or creates a new one"""
@@ -170,7 +171,7 @@ class AstronomicalCalculator:
         if date is None:
             date = datetime.now(timezone.utc)
 
-        self.observer.date = date.strftime("%Y/%m/%d")
+        self.__observer.date = date.strftime("%Y/%m/%d")
 
         # Select object
         if object_type == AstronomicalObjectType.STAR:
@@ -186,9 +187,9 @@ class AstronomicalCalculator:
             astronomical_object = self._objects[object_type]
 
         try:
-            rise_time = self.observer.next_rising(astronomical_object)
-            set_time = self.observer.next_setting(astronomical_object)
-            transit_time = self.observer.next_transit(astronomical_object)
+            rise_time = self.__observer.next_rising(astronomical_object)
+            set_time = self.__observer.next_setting(astronomical_object)
+            transit_time = self.__observer.next_transit(astronomical_object)
 
             return {
                 "rise": ephem.localtime(rise_time),

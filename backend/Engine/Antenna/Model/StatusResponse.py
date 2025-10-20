@@ -5,10 +5,10 @@ from backend.Engine.Antenna.Model.PositionModel import PositionModel
 
 
 class StatusResponse(BaseModel):
-    """Odpowiedź statusu anteny"""
+    """Antenna status response"""
     connected: bool
     current_position: Optional[PositionModel]
     is_moving: bool
     last_error: Optional[str]
     observer_location: Optional[ObserverLocationModel]
-    port: Optional[str] = Field(None, description="Aktualnie używany port szeregowy")
+    port: Optional[str] = Field(None, description="Currently used serial port")

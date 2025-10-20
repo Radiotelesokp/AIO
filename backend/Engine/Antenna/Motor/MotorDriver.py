@@ -2,28 +2,28 @@ from abc import ABC, abstractmethod
 from typing import Tuple
 
 class MotorDriver(ABC):
-    """Abstrakcyjna klasa sterownika silnika"""
+    """Abstract motor driver class"""
 
     @abstractmethod
     def connect(self) -> None:
-        """Nawiązuje połączenie z sterownikiem"""
+        """Establishes connection with the driver"""
 
     @abstractmethod
     def disconnect(self) -> None:
-        """Rozłącza się ze sterownikiem"""
+        """Disconnects from the driver"""
 
     @abstractmethod
     def move_to_position(self, azimuth: float, elevation: float) -> None:
-        """Przesuwa anteny do pozycji w stopniach"""
+        """Moves the antenna to the specified position in degrees"""
 
     @abstractmethod
     def get_position(self) -> Tuple[float, float]:
-        """Zwraca aktualną pozycję w stopniach"""
+        """Returns the current position in degrees"""
 
     @abstractmethod
     def stop(self) -> None:
-        """Zatrzymuje wszystkie silniki"""
+        """Stops all motors"""
 
     @abstractmethod
     def is_moving(self) -> bool:
-        """Sprawdza czy silniki się poruszają"""
+        """Checks if the motors are moving"""

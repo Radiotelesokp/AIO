@@ -3,11 +3,7 @@ from backend.Engine.AstronomyCalculator import AstronomicalObjectType
 
 
 class TrackingConfigModel(BaseModel):
-    """Konfiguracja śledzenia astronomicznego"""
-    object_name: str = Field(..., description="Nazwa obiektu do śledzenia")
-    object_type: AstronomicalObjectType = Field(
-        AstronomicalObjectType.SUN, description="Typ obiektu astronomicznego"
-    )
-    update_interval: float = Field(
-        1.0, ge=0.1, le=300, description="Interwał aktualizacji pozycji w sekundach"
-    )
+    """Astronomical tracking configuration"""
+    object_name: str = Field(..., description="Name of the object to track")
+    object_type: AstronomicalObjectType = Field(AstronomicalObjectType.SUN, description="Type of astronomical object")
+    update_interval: float = Field(1.0, ge=0.1, le=300, description="Position update interval in seconds")

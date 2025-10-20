@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class AntennaState(Enum):
-    """Stany anteny"""
+    """Antenna states"""
 
     IDLE = "idle"
     MOVING = "moving"

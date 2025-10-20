@@ -2,6 +2,6 @@ from pydantic import BaseModel, Field
 
 
 class CalibrationModel(BaseModel):
-    """Model kalibracji anteny"""
-    azimuth_offset: float = Field(0.0, description="Offset azymutu w stopniach")
-    elevation_offset: float = Field(0.0, description="Offset elewacji w stopniach")
+    """Antenna calibration model"""
+    azimuth_offset: float = Field(0.0, description="Azimuth offset in degrees")
+    elevation_offset: float = Field(0.0, description="Elevation offset in degrees")

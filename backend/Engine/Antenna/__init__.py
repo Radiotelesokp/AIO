@@ -2,7 +2,6 @@ from backend.Engine.Antenna.AntennaControllerFactory import AntennaControllerFac
 from backend.Engine.Antenna.AntennaController import AntennaController
 from backend.Engine.Antenna.AntennaControlerSerivce import AntennaControllerService
 from backend.Engine.Antenna.Position import Position
-from backend.Engine.Antenna.PositionCalibration import PositionCalibration
 
 # Domyślny port szeregowy dla kontrolera SPID
 DEFAULT_SPID_PORT = "/dev/tty.usbserial-A10PDNT7"

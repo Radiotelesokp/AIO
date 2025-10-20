@@ -4,6 +4,6 @@ from pydantic import BaseModel
 # Modele Pydantic dla API
 # Klasa odpowiedzialna za żądanie przeniesienia anteny w określone położenie
 class PositionRequest(BaseModel):
-    """Żądanie pozycji anteny"""
+    """Antenna position request"""
     azimuth: float
     elevation: float

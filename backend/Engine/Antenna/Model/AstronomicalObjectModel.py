@@ -3,6 +3,6 @@ from backend.Engine.AstronomyCalculator import AstronomicalObjectType
 
 
 class AstronomicalObjectModel(BaseModel):
-    """Model obiektu astronomicznego"""
-    name: str = Field(..., description="Nazwa obiektu astronomicznego")
-    object_type: AstronomicalObjectType = Field(..., description="Typ obiektu")
+    """Astronomical object model"""
+    name: str = Field(..., description="Name of the astronomical object")
+    object_type: AstronomicalObjectType = Field(..., description="Type of object")

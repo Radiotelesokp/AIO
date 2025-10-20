@@ -3,6 +3,6 @@ from pydantic import BaseModel
 
 # Klasa reprezentująca pozycję anteny
 class PositionModel(BaseModel):
-    """Model pozycji anteny"""
+    """Antenna position model"""
     azimuth: float
     elevation: float

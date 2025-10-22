@@ -11,11 +11,11 @@ import os
 import json
 import sys
 
+from backend.Engine.Antenna import AntennaControllerFactory
+from backend.Engine.Antenna.Position import PositionCalibration
+
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from antenna_controller import PositionCalibration, AntennaControllerFactory
-
 
 class TestCalibrationPersistence(unittest.TestCase):
     """Testy dla funkcji zapisywania/odczytywania kalibracji"""

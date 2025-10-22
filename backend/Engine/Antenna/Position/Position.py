@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.AntennaControllerHelper import AntennaLimits
+from LanguageHelper import LanguageHelper
 
 
 @dataclass

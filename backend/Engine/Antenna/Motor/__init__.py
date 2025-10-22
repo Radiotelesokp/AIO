@@ -1,7 +1,7 @@
-from backend.Engine.Antenna.Motor.MotorConfig import MotorConfig
-from backend.Engine.Antenna.Motor.MotorDriver import MotorDriver
-from backend.Engine.Antenna.Motor.RotctlMotorDriver import RotctlMotorDriver
-from backend.Engine.Antenna.Motor.SimulatedMotorDriver import SimulatedMotorDriver
+from .MotorConfig import MotorConfig
+from .MotorDriver import MotorDriver
+from .RotctlMotorDriver import RotctlMotorDriver
+from .SimulatedMotorDriver import SimulatedMotorDriver
 
 
 __all__ = ["MotorConfig", "MotorDriver", "RotctlMotorDriver", "SimulatedMotorDriver"]

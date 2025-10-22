@@ -4,9 +4,9 @@ import subprocess
 import re
 from typing import Optional, Any
 
-from backend.Engine.Antenna import DEFAULT_ROTCTL_MODEL, DEFAULT_TIMEOUT, DEFAULT_BAUDRATE, DEFAULT_SPID_PORT
-from backend.Engine.Antenna.AntennaControllerHelper import *
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.Constants import DEFAULT_ROTCTL_MODEL, DEFAULT_TIMEOUT, DEFAULT_BAUDRATE, DEFAULT_SPID_PORT
+from Engine.Antenna.AntennaControllerHelper import *
+from LanguageHelper import LanguageHelper
 
 
 class AntennaControllerService:

@@ -1,4 +1,6 @@
-from backend.Engine.AstronomyCalculator import ObserverLocation, AstronomicalObjectType, AstronomicalPosition
+from .ObserverLocation import ObserverLocation
+from .AstronomicalObjectTypeEnum import AstronomicalObjectType
+from .AstronomicalPosition import AstronomicalPosition
 import math
 import ephem
 from datetime import datetime, timezone

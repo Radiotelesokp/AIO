@@ -1,7 +1,12 @@
-
+import time
+import logging
+from backend.Engine.Antenna import Position, AntennaControllerFactory, DEFAULT_BAUDRATE
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
+from backend.Engine.Antenna.Motor import MotorConfig
 
 # Przykład użycia
 if __name__ == "__main__":
+    logger = logging.getLogger(__name__)
 
     def status_callback(position: Position, state: AntennaState):
         """Callback wywoływany przy zmianie stanu"""

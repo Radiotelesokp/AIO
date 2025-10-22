@@ -1,19 +1,15 @@
-from backend.Engine.AstronomyCalculator.AstronomicalCalculator import AstronomicalCalculator
-from backend.Engine.AstronomyCalculator.AstronomicalTracker import AstronomicalTracker
-from backend.Engine.AstronomyCalculator.AstronomicalPosition import AstronomicalPosition
-from backend.Engine.AstronomyCalculator.AstronomicalObjectTypeEnum import AstronomicalObjectType
-from backend.Engine.AstronomyCalculator.ObserverLocation import ObserverLocation
+from .AstronomicalCalculator import AstronomicalCalculator
+from .AstronomicalTracker import AstronomicalTracker
+from .AstronomicalPosition import AstronomicalPosition
+from .AstronomicalObjectTypeEnum import AstronomicalObjectType
+from .ObserverLocation import ObserverLocation
 
 
-__all__ = ["AstronomicalCalculator", "AstronomicalTracker", "AstronomicalPosition", "AstronomicalObjectType", "ObserverLocation"]
+__all__ = ["AstronomicalCalculator", "AstronomicalTracker", "AstronomicalPosition", "AstronomicalObjectType",
+           "ObserverLocation", "BRIGHT_STARS"]
 __author__ = "Aleks Czarnecki"
 __version__ = "0.1.0"
 __editor__ = "Wiktoria Dębowska"
-
-# Predefiniowane lokalizacje obserwatoriów
-OBSERVATORIES = {
-    "poznan": ObserverLocation(52.40030228321106, 16.955077591791788, 60, "Poznań Polanka")
-}
 
 # Jasne gwiazdy do testów
 BRIGHT_STARS = {

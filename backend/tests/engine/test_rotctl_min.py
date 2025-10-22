@@ -13,10 +13,12 @@ import sys
 import time
 import os
 
+from backend.Engine.Antenna import DEFAULT_ROTCTL_MODEL, DEFAULT_BAUDRATE, DEFAULT_SPID_PORT
+
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from antenna_controller import DEFAULT_SPID_PORT, DEFAULT_BAUDRATE, DEFAULT_ROTCTL_MODEL
+
 
 def ustaw_pozycje(port: str, az: float, el: float, speed: int = DEFAULT_BAUDRATE):
     """Ustawia pozycję rotatora SPID MD-03 za pomocą rotctl (Hamlib)"""

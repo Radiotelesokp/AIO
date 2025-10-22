@@ -1,8 +1,8 @@
 from typing import Optional
 from dataclasses import dataclass
 
-from backend.Engine.Antenna.Position import Position
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.Position import Position
+from LanguageHelper import LanguageHelper
 
 
 @dataclass

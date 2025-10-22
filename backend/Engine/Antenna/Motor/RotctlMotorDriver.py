@@ -2,10 +2,11 @@ import logging
 import time
 from typing import Tuple
 
-from backend.Engine.Antenna import DEFAULT_BAUDRATE, AntennaControllerService
-from backend.Engine.Antenna.AntennaControllerHelper import CommunicationError, PositionError
-from backend.Engine.Antenna.Motor import MotorDriver
-from backend.LanguageHelper import LanguageHelper
+from ..Constants import DEFAULT_BAUDRATE
+from ..AntennaControllerService import AntennaControllerService
+from ..AntennaControllerHelper import CommunicationError, PositionError
+from .MotorDriver import MotorDriver
+from LanguageHelper import LanguageHelper
 
 
 class RotctlMotorDriver(MotorDriver):

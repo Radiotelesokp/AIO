@@ -5,10 +5,10 @@ from dataclasses import dataclass, asdict
 from datetime import time
 from typing import Dict, Any
 
-from backend.Engine.Antenna import DEFAULT_CALIBRATION_FILE
-from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits, AntennaError
-from backend.Engine.Antenna.Position import Position
-from backend.LanguageHelper import LanguageHelper
+from ..Constants import DEFAULT_CALIBRATION_FILE
+from .Position import Position
+from ..AntennaControllerHelper import AntennaLimits, AntennaError
+from LanguageHelper import LanguageHelper
 
 
 @dataclass

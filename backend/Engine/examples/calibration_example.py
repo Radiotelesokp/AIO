@@ -13,13 +13,14 @@ import logging
 import sys
 import os
 
+from backend.Engine.Antenna import AntennaControllerFactory, Position
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
+from backend.Engine.Antenna.Position import PositionCalibration
+
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from antenna_controller import (
-    AntennaControllerFactory, PositionCalibration,
-    Position, AntennaState
-)
+
 
 # Konfiguracja logowania
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

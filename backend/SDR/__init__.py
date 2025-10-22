@@ -1,6 +1,6 @@
-from backend.SDR.BiasTee import BiasTee
-from backend.SDR.SDRService import SDRService
-from backend.SDR.SpectrumScanner import SpectrumScanner
-from backend.SDR.SpectrumSender import SpectrumSender
+from .BiasTee import BiasTee
+from .SDRServiceRest import SDRService
+from .SpectrumScanner import SpectrumScanner
+from .SpectrumSender import SpectrumSender
 
 __all__ = ["BiasTee", "SDRService", "SpectrumScanner", "SpectrumSender"]

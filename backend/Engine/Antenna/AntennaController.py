@@ -3,11 +3,11 @@ import threading
 import time
 from typing import Optional, Dict, Any, Callable
 
-from backend.Engine.Antenna import DEFAULT_CALIBRATION_FILE
-from backend.Engine.Antenna.AntennaControllerHelper import *
-from backend.Engine.Antenna.Motor import MotorDriver, MotorConfig
-from backend.Engine.Antenna.Position import Position, PositionCalibration
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.Constants import DEFAULT_CALIBRATION_FILE
+from Engine.Antenna.AntennaControllerHelper import *
+from Engine.Antenna.Motor import MotorDriver, MotorConfig
+from Engine.Antenna.Position import Position, PositionCalibration
+from LanguageHelper import LanguageHelper
 
 
 class AntennaController:

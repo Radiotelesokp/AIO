@@ -6,8 +6,12 @@ services:
     build:
       context: ../
       dockerfile: dockers/Dockerfile_backend
-    depends_on:
-      - database
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=spectrum
+    #depends_on:
+    #- database
 
   frontend:
     container_name: frontend
@@ -15,12 +19,13 @@ services:
       context: ../
       dockerfile: dockers/Dockerfile_frontend
     depends_on:
-      - database
+      #- database
       - backend
 
-  database:
-    container_name: database
-    build:
-      dockerfile: Dockerfile_database
+  #database:
+  #  container_name: database
+  #  build:
+  #    context: ./
+  #    dockerfile: Dockerfile_database
 
 

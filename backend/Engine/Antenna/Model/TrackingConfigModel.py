@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from backend.Engine.AstronomyCalculator import AstronomicalObjectType
+from ...AstronomyCalculator.AstronomicalObjectTypeEnum import AstronomicalObjectType
 
 
 class TrackingConfigModel(BaseModel):

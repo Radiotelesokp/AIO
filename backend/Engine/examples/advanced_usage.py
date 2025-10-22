@@ -14,16 +14,18 @@ import sys
 import time
 from datetime import datetime, timezone, timedelta
 
+from backend.Engine.Antenna.Position import Position
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
+from backend.Engine.Antenna import AntennaControllerFactory, DEFAULT_SPID_PORT, DEFAULT_BAUDRATE
+from backend.Engine.Antenna.Motor import MotorConfig
+from backend.Engine.AstronomyCalculator import AstronomicalCalculator, AstronomicalObjectType
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from antenna_controller import (MotorConfig,
-    Position, AntennaState, DEFAULT_SPID_PORT, DEFAULT_BAUDRATE,
-    AntennaControllerFactory
-)
-
-from astronomic_calculator import (
-    AstronomicalCalculator, AstronomicalObjectType, OBSERVATORIES
-)
+# Predefiniowane lokalizacje obserwatoriów
+OBSERVATORIES = {
+    "poznan": ObserverLocation(languageHelper,52.40030228321106, 16.955077591791788, 60, "Poznań Polanka")
+}
 
 # Dodanie wyjątku SafetyError dla przypadku przekroczenia limitów
 class SafetyError(Exception):

@@ -1,10 +1,12 @@
 import logging
 from typing import Optional
 
-from backend.Engine.Antenna import DEFAULT_CALIBRATION_FILE, DEFAULT_BAUDRATE, AntennaController, AntennaControllerService
-from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits
-from backend.Engine.Antenna.Motor import MotorConfig, RotctlMotorDriver, SimulatedMotorDriver
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.Constants import DEFAULT_CALIBRATION_FILE, DEFAULT_BAUDRATE
+from Engine.Antenna.AntennaController import AntennaController
+from Engine.Antenna.AntennaControllerService import AntennaControllerService
+from Engine.Antenna.AntennaControllerHelper import AntennaLimits
+from Engine.Antenna.Motor import MotorConfig, RotctlMotorDriver, SimulatedMotorDriver
+from LanguageHelper import LanguageHelper
 
 
 class AntennaControllerFactory:

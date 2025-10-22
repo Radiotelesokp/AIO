@@ -15,20 +15,11 @@ import time
 import logging
 import sys
 
+from backend.Engine.Antenna import AntennaControllerFactory, Position
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaState, SafetyError
+from backend.Engine.AstronomyCalculator import ObserverLocation, AstronomicalCalculator, AstronomicalTracker
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from antenna_controller import (
-    AntennaControllerFactory,
-    Position,
-    AntennaState,
-    SafetyError
-)
-
-from astronomic_calculator import (
-    ObserverLocation,
-    AstronomicalCalculator,
-    AstronomicalTracker,
-)
 
 # Konfiguracja logowania
 logging.basicConfig(

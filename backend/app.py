@@ -4,43 +4,40 @@ import logging
 from fastapi import FastAPI
 import uvicorn
 
-from backend.Engine.Antenna.Model import AzimuthCalibrationModel, CalibrationModel, AxisMoveModel, TrackingConfigModel, \
-    ObserverLocationModel, PositionModel, ConnectionConfigModel, StatusResponse
-from backend.Engine.AstronomyCalculator import AstronomicalObjectType
-from backend.Engine import EngineServiceRest
-from backend.SDR import SDRService
-
+from Engine.Antenna.Model import *
+from Engine.AstronomyCalculator import AstronomicalObjectType
+from Engine.EngineServiceRest import EngineServiceRest
+from SDR import SDRService
+from LanguageHelper import LanguageHelper
 
 SoapySDR.setLogLevel(SoapySDR.SOAPY_SDR_FATAL)
 app = FastAPI(title="KN Spectrum - Project Radiotelescope")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-i18n = I18nMiddleware(default_locale='en',locale_path='locales')
-app.add_middleware(i18n)
-
+languageHelper = LanguageHelper(language="pl", defaultLanguage="en")
 sdr = None
 sdrService = None
-engineService = EngineServiceRest()
+engineService = EngineServiceRest(languageHelper)
 
 
 # Bias Tee endpoints - please don't use that, because we don't have BiasTee in our hardware project
 @app.get('/biastee/status')
-def bias_tee_status():
+async def bias_tee_status():
     return sdrService.bias_tee_status()
 
 @app.put('/biastee/{action}')
-def bias_tee_control(action):
+async def bias_tee_control(action):
     return sdrService.bias_tee_control(action)
 
 
 # SDR endpoints
 @app.post('/scan/{start_freq}/{stop_freq}/{step_freq}/{sample_rate}/{gain}/{n_samples}/{channel}')
-def scan_spectrum(start_freq, stop_freq, step_freq, sample_rate, gain, n_samples, channel):
+async def scan_spectrum(start_freq, stop_freq, step_freq, sample_rate, gain, n_samples, channel):
     return sdrService.scan_spectrum(start_freq, stop_freq, step_freq, sample_rate, gain, n_samples, channel)
 
 @app.post('/send/{center_freq}/{tone_freq}/{duration}/{sample_rate}/{gain}')
-def send_spectrum(center_freq, tone_freq, duration, sample_rate, gain):
+async def send_spectrum(center_freq, tone_freq, duration, sample_rate, gain):
     return sdrService.send_spectrum(center_freq, tone_freq, duration, sample_rate, gain)
 
 
@@ -140,7 +137,7 @@ if __name__ == '__main__':
         if driver != "hackrf":
             raise ValueError(f"No SDR supported - required 'hackrf', but is {driver}")
 
-        sdrService = SDRService(sdr = sdr)
+        sdrService = SDRService(sdr = sdr, languageHelper=languageHelper)
 
     except Exception as ex:
         sys.exit(f"Connection error with SDR: {ex}")

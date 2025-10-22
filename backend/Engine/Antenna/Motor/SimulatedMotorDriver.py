@@ -2,9 +2,9 @@ import logging
 import time
 from typing import Tuple
 
-from backend.Engine.Antenna.AntennaControllerHelper import CommunicationError
-from backend.Engine.Antenna.Motor import MotorDriver
-from backend.LanguageHelper import LanguageHelper
+from Engine.Antenna.AntennaControllerHelper import CommunicationError
+from Engine.Antenna.Motor import MotorDriver
+from LanguageHelper import LanguageHelper
 
 
 class SimulatedMotorDriver(MotorDriver):

@@ -1,13 +1,21 @@
 # Przykład użycia
+from datetime import datetime, timezone
+
+from backend.Engine.AstronomyCalculator import AstronomicalCalculator, AstronomicalTracker, \
+    AstronomicalObjectType
+
+# Predefiniowane lokalizacje obserwatoriów
+OBSERVATORIES = {
+    "poznan": ObserverLocation(languageHelper,52.40030228321106, 16.955077591791788, 60, "Poznań Polanka")
+}
+
 def test_astronomic_calculator():
     observer_location = OBSERVATORIES["poznan"]
     calculator = AstronomicalCalculator(observer_location)
     tracker = AstronomicalTracker(calculator)
 
     print(f"Obserwator: {observer_location.name}")
-    print(
-        f"Współrzędne: {observer_location.latitude:.4f}°N, {observer_location.longitude:.4f}°E"
-    )
+    print(f"Współrzędne: {observer_location.latitude:.4f}°N, {observer_location.longitude:.4f}°E")
     print(f"Wysokość: {observer_location.elevation}m n.p.m.\n")
 
     # Test pozycji różnych obiektów
@@ -33,9 +41,7 @@ def test_astronomic_calculator():
             print(f"  Widoczny: {'Tak' if position.is_visible else 'Nie'}")
             print(f"  Jasność: {position.magnitude:.1f}m")
             if antenna_pos:
-                print(
-                    f"  Pozycja SPID: Az={antenna_pos.azimuth:.2f}°, El={antenna_pos.elevation:.2f}° (90°=horyzont)"
-                )
+                print(f"Pozycja SPID: Az={antenna_pos.azimuth:.2f}°, El={antenna_pos.elevation:.2f}° (90°=horyzont)")
             print()
 
         except Exception as e:

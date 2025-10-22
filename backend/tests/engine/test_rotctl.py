@@ -15,19 +15,14 @@ import time
 import logging
 import os
 
+from backend.Engine.Antenna import DEFAULT_BAUDRATE, DEFAULT_CALIBRATION_FILE, DEFAULT_SPID_PORT
+from backend.Engine.Antenna.Position import PositionCalibration
+
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from antenna_controller import (
-    PositionCalibration, DEFAULT_CALIBRATION_FILE, DEFAULT_SPID_PORT, DEFAULT_BAUDRATE,
-    sprawdz_rotctl
-)
-
 # Konfiguracja logowania
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 def ustaw_pozycje(port: str, az: float, el: float, speed: int = DEFAULT_BAUDRATE, apply_calibration: bool = True):

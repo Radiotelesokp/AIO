@@ -3,8 +3,10 @@ import logging
 import SoapySDR
 from fastapi.responses import JSONResponse
 
-from backend.LanguageHelper import LanguageHelper
-from backend.SDR import SpectrumSender, BiasTee, SpectrumScanner
+from LanguageHelper import LanguageHelper
+from .BiasTee import BiasTee
+from .SpectrumScanner import SpectrumScanner
+from .SpectrumSender import SpectrumSender
 
 
 class SDRService:
@@ -13,7 +15,7 @@ class SDRService:
     __sdr: SoapySDR
 
     def __init__(self, sdr: SoapySDR, languageHelper: LanguageHelper):
-        self.__biasTee = BiasTee(sdr = sdr, languageHelper=languageHelper)
+        self.__biasTee = BiasTee(sdr, languageHelper)
         self.__sdr = sdr
         self.__languageHelper = languageHelper
 

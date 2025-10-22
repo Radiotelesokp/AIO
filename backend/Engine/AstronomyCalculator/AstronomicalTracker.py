@@ -1,8 +1,9 @@
 import logging
 from typing import Optional, Tuple
 
-from backend.Engine.Antenna import Position
-from backend.Engine.AstronomyCalculator import AstronomicalObjectType, AstronomicalCalculator
+from ..Antenna.Position.Position import Position
+from .AstronomicalObjectTypeEnum import AstronomicalObjectType
+from .AstronomicalCalculator import AstronomicalCalculator
 
 
 class AstronomicalTracker:

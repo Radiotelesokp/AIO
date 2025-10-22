@@ -12,12 +12,13 @@ import os
 import sys
 from datetime import datetime
 
+from backend.Engine.Antenna import AntennaControllerFactory, DEFAULT_BAUDRATE, Position
+from backend.Engine.Antenna.AntennaControllerHelper import AntennaLimits, AntennaState
+from backend.Engine.Antenna.Motor import MotorConfig
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from antenna_controller import (MotorConfig, 
-    Position, DEFAULT_BAUDRATE,
-    AntennaLimits, AntennaControllerFactory, AntennaState
-)
+
 
 
 # =============================================================================

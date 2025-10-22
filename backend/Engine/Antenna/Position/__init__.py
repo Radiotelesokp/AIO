@@ -1,5 +1,5 @@
-from backend.Engine.Antenna.Position.Position import Position
-from backend.Engine.Antenna.Position.PositionCalibration import PositionCalibration
+from .Position import Position
+from .PositionCalibration import PositionCalibration
 
 __all__ = ["Position", "PositionCalibration"]
 __author__ = "Aleks Czarnecki"

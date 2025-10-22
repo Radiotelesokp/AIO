@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-from backend.Engine.Antenna.Model import ObserverLocationModel
-from backend.Engine.Antenna.Model.PositionModel import PositionModel
+from .PositionModel import PositionModel
+from .ObserverLocationModel import ObserverLocationModel
 
 
 class StatusResponse(BaseModel):

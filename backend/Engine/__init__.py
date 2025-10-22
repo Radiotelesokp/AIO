@@ -1,4 +1,4 @@
-from backend.Engine.EngineServiceRest import EngineServiceRest
+from .EngineServiceRest import EngineServiceRest
 
 
 __all__ = ["EngineServiceRest"]

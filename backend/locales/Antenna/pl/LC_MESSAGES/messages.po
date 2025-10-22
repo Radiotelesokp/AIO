@@ -1,23 +1,23 @@
 msgid "position.azimuth.limit.error"
-msgstr "Azymut musi mieścić się w zakresie 0–360°, otrzymano:"
+msgstr "Azymut musi miescic sie w zakresie 0-360*, otrzymano:"
 
 msgid "simulator.motor.is.disconnected"
-msgstr "Symulator nie jest podłączony."
+msgstr "Symulator nie jest podlaczony."
 
 msgid "rotctl.motor.hamlib.is.unavailable.error"
-msgstr "Rotctl (Hamlib) nie jest dostępny w tym systemie."
+msgstr "Rotctl (Hamlib) nie jest dostepny w tym systemie."
 
 msgid "rotctl.motor.cannot.connect.via.rotctl.error"
-msgstr "Nie można połączyć się przez rotctl:"
+msgstr "Nie mozna polaczyc sie przez rotctl:"
 
 msgid "rotctl.motor.driver.disconnected.error"
-msgstr "Sterownik rotctl nie jest podłączony."
+msgstr "Sterownik rotctl nie jest podlaczony."
 
 msgid "rotctl.motor.cannot.move.antena.error"
-msgstr "Nie można poruszyć anteną przez rotctl:"
+msgstr "Nie mozna poruszyc antena przez rotctl:"
 
 msgid "rotctl.motor.cannot.stop.antena.error"
-msgstr "Nie można zatrzymać anteny przez rotctl:"
+msgstr "Nie mozna zatrzymac anteny przez rotctl:"
 
 msgid "rotctl.motor.cannot.stop.antena.timeout.error"
 msgstr "Przekroczono limit czasu podczas zatrzymywania rotora przez rotctl."
@@ -26,64 +26,64 @@ msgid "rotctl.motor.cannot.stop.antena.proc.error"
 msgstr "Problem z procesem podczas zatrzymywania rotora:"
 
 msgid "rotctl.motor.elevation.out.of.range.error"
-msgstr "Elewacja {el:.1f}° poza dozwolonym zakresem (-90° do +90°)."
+msgstr "Elewacja {el:.1f}* poza dozwolonym zakresem (-90* do +90*)."
 
 msgid "rotctl.motor.setting.position.error"
-msgstr "Błąd rotctl podczas ustawiania pozycji Az={normalized_az:.1f}°, El={el:.1f}°: kod {code}, błąd: '{error_msg}'."
+msgstr "Blad rotctl podczas ustawiania pozycji Az={normalized_az:.1f}*, El={el:.1f}*: kod {code}, blad: '{error_msg}'."
 
 msgid "rotctl.motor.communication.error"
-msgstr "Błąd komunikacji z rotctl:"
+msgstr "Blad komunikacji z rotctl:"
 
 msgid "rotctl.motor.timeout.set.after.all.attempts"
-msgstr "Przekroczono limit czasu podczas ustawiania pozycji w rotctl po wszystkich próbach."
+msgstr "Przekroczono limit czasu podczas ustawiania pozycji w rotctl po wszystkich probach."
 
 msgid "rotctl.motor.incomplete.position.response"
-msgstr "Niekompletna odpowiedź pozycji z rotctl:"
+msgstr "Niekompletna odpowiedz pozycji z rotctl:"
 
 msgid "rotctl.motor.reading.position.error"
-msgstr "Błąd podczas odczytu pozycji z rotctl:"
+msgstr "Blad podczas odczytu pozycji z rotctl:"
 
 msgid "rotctl.motor.timeout.reading.after.all.attempts"
-msgstr "Przekroczono limit czasu podczas odczytu pozycji z rotctl po wszystkich próbach."
+msgstr "Przekroczono limit czasu podczas odczytu pozycji z rotctl po wszystkich probach."
 
 msgid "antenna.initialization.error"
-msgstr "Błąd inicjalizacji:"
+msgstr "Blad inicjalizacji:"
 
 msgid "antenna.azimuth.out.of.range.error"
-msgstr "Azymut {azimuth}° poza zakresem ({min_azimuth}°–{max_azimuth}°)."
+msgstr "Azymut {azimuth}* poza zakresem ({min_azimuth}*-{max_azimuth}*)."
 
 msgid "antenna.elevation.out.of.range.error"
-msgstr "Elewacja {el}° poza zakresem ({min_el}°–{max_el}°)."
+msgstr "Elewacja {el}* poza zakresem ({min_el}*-{max_el}*)."
 
 msgid "antenna.error.state"
-msgstr "System znajduje się w stanie błędu — ruch nie jest możliwy."
+msgstr "System znajduje sie w stanie bledu - ruch nie jest mozliwy."
 
 msgid "antenna.movement.error"
-msgstr "Błąd ruchu:"
+msgstr "Blad ruchu:"
 
 msgid "antenna.stop.error"
-msgstr "Błąd zatrzymania:"
+msgstr "Blad zatrzymania:"
 
 msgid "antenna.timeout.movement.error"
 msgstr "Przekroczono limit czasu ruchu ({timeout}s), brak ruchu przez {time_site}s."
 
 msgid "rest.antenna.connection.error"
-msgstr "Błąd połączenia:"
+msgstr "Blad polaczenia:"
 
 msgid "rest.antenna.unable.retrieve.position"
-msgstr "Nie można pobrać pozycji."
+msgstr "Nie mozna pobrac pozycji."
 
 msgid "rest.antenna.retrieving.position.error"
-msgstr "Błąd podczas pobierania pozycji:"
+msgstr "Blad podczas pobierania pozycji:"
 
 msgid "rest.antenna.setting.position.error"
-msgstr "Błąd podczas ustawiania pozycji:"
+msgstr "Blad podczas ustawiania pozycji:"
 
 msgid "rest.antenna.stopping.antenna.error"
-msgstr "Błąd zatrzymywania anteny:"
+msgstr "Blad zatrzymywania anteny:"
 
 msgid "rest.antenna.setting.location.error"
-msgstr "Błąd ustawiania lokalizacji obserwatora:"
+msgstr "Blad ustawiania lokalizacji obserwatora:"
 
 msgid "rest.antenna.location.not.set"
 msgstr "Lokalizacja obserwatora nie jest ustawiona."
@@ -92,61 +92,61 @@ msgid "rest.antenna.object.is.not.visible"
 msgstr "Obiekt {name} nie jest widoczny."
 
 msgid "rest.antenna.object.out.of.range.error"
-msgstr "Obiekt {name} znajduje się poza zasięgiem anteny."
+msgstr "Obiekt {name} znajduje sie poza zasiegiem anteny."
 
 msgid "rest.antenna.error.moving.to.object"
-msgstr "Błąd podczas przechodzenia do obiektu:"
+msgstr "Blad podczas przechodzenia do obiektu:"
 
 msgid "rest.antenna.tracking.is.active"
-msgstr "Śledzenie jest już aktywne. Najpierw je zatrzymaj."
+msgstr "Sledzenie jest juz aktywne. Najpierw je zatrzymaj."
 
 msgid "rest.antenna.starting.tracking.error"
-msgstr "Błąd uruchamiania śledzenia:"
+msgstr "Blad uruchamiania sledzenia:"
 
 msgid "rest.antenna.stopping.tracking.error"
-msgstr "Błąd zatrzymywania śledzenia:"
+msgstr "Blad zatrzymywania sledzenia:"
 
 msgid "rest.antenna.listing.ports.error"
-msgstr "Błąd podczas wyświetlania portów:"
+msgstr "Blad podczas wyswietlania portow:"
 
 msgid "rest.antenna.diagnostic.error"
-msgstr "Błąd diagnostyki:"
+msgstr "Blad diagnostyki:"
 
 msgid "rest.antenna.invalid.astronomical.object"
-msgstr "Nieprawidłowy obiekt astronomiczny:"
+msgstr "Nieprawidlowy obiekt astronomiczny:"
 
 msgid "rest.antenna.position.computing.error"
-msgstr "Błąd obliczania pozycji:"
+msgstr "Blad obliczania pozycji:"
 
 msgid "rest.antenna.unable.position.computing.error"
-msgstr "Nie można obliczyć pozycji dla obiektu:"
+msgstr "Nie mozna obliczyc pozycji dla obiektu:"
 
 msgid "rest.antenna.azimuth.calibration.error"
-msgstr "Błąd kalibracji azymutu:"
+msgstr "Blad kalibracji azymutu:"
 
 msgid "rest.antenna.fetching.calibration.error"
-msgstr "Błąd pobierania kalibracji:"
+msgstr "Blad pobierania kalibracji:"
 
 msgid "rest.antenna.setting.calibration.error"
-msgstr "Błąd ustawiania kalibracji:"
+msgstr "Blad ustawiania kalibracji:"
 
 msgid "rest.antenna.resetting.calibration.error"
-msgstr "Błąd resetowania kalibracji:"
+msgstr "Blad resetowania kalibracji:"
 
 msgid "rest.antenna.wrong.axis"
-msgstr "Oś musi być 'azimuth' lub 'elevation'."
+msgstr "Os musi byc 'azimuth' lub 'elevation'."
 
 msgid "rest.antenna.axis.move.error"
-msgstr "Błąd ruchu osi:"
+msgstr "Blad ruchu osi:"
 
 msgid "rest.antenna.controller.is.not.initialized.error"
-msgstr "Kontroler anteny nie został zainicjalizowany. Użyj /connect."
+msgstr "Kontroler anteny nie zostal zainicjalizowany. Uzyj /connect."
 
 msgid "rest.antenna.controller.is.not.configured.error"
-msgstr "Kalkulator astronomiczny nie jest skonfigurowany. Ustaw lokalizację obserwatora."
+msgstr "Kalkulator astronomiczny nie jest skonfigurowany. Ustaw lokalizacje obserwatora."
 
 msgid "rest.antenna.tracker.is.not.configured.error"
-msgstr "Tracker astronomiczny nie jest skonfigurowany. Ustaw lokalizację obserwatora."
+msgstr "Tracker astronomiczny nie jest skonfigurowany. Ustaw lokalizacje obserwatora."
 
 msgid "rest.antenna.objects.need.coordinates.error"
-msgstr "Śledzenie obiektów niestandardowych wymaga współrzędnych."
+msgstr "Sledzenie obiektow niestandardowych wymaga wspolrzednych."

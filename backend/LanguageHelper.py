@@ -9,7 +9,7 @@ class LanguageHelper:
         self.__language = language
         self.__defaultLanguage = defaultLanguage
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        self.LOCALES_DIR = os.path.join(BASE_DIR, "locales")
+        self.LOCALES_DIR = os.path.join(BASE_DIR, "AIO/backend/locales")
         self.__supportedLanguages = ["en", "pl"]
 
     def getLanguage(self) -> str:
@@ -35,7 +35,3 @@ class LanguageHelper:
     def getTranslatedMessage(self, module: str):
         """Shortcut to get gettext function"""
         return self.__getTranslations(module).gettext
-
-
-
-

@@ -1,5 +1,5 @@
 msgid "position.azimuth.limit.error"
-msgstr "Azimuth must be in the range 0–360°, received:"
+msgstr "Azimuth must be in the range 0-360*, received:"
 
 msgid "simulator.motor.is.disconnected"
 msgstr "Simulator is not connected."
@@ -26,10 +26,10 @@ msgid "rotctl.motor.cannot.stop.antena.proc.error"
 msgstr "Problem with process while stopping rotor:"
 
 msgid "rotctl.motor.elevation.out.of.range.error"
-msgstr "Elevation {el:.1f}° is out of allowed range (-90° to +90°)."
+msgstr "Elevation {el:.1f}* is out of allowed range (-90* to +90*)."
 
 msgid "rotctl.motor.setting.position.error"
-msgstr "Rotctl error while setting position Az={normalized_az:.1f}°, El={el:.1f}°: code {code}, error: '{error_msg}'."
+msgstr "Rotctl error while setting position Az={normalized_az:.1f}*, El={el:.1f}*: code {code}, error: '{error_msg}'."
 
 msgid "rotctl.motor.communication.error"
 msgstr "Error communicating with rotctl:"
@@ -50,10 +50,10 @@ msgid "antenna.initialization.error"
 msgstr "Initialization error:"
 
 msgid "antenna.azimuth.out.of.range.error"
-msgstr "Azimuth {azimuth}° out of limits ({min_azimuth}°–{max_azimuth}°)."
+msgstr "Azimuth {azimuth}* out of limits ({min_azimuth}*-{max_azimuth}*)."
 
 msgid "antenna.elevation.out.of.range.error"
-msgstr "Elevation {el}° out of limits ({min_el}°–{max_el}°)."
+msgstr "Elevation {el}* out of limits ({min_el}*-{max_el}*)."
 
 msgid "antenna.error.state"
 msgstr "System is in error state - movement not possible."

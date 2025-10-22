@@ -26,3 +26,6 @@ Thumbs.db
 
 # Pliki Dockerowe
 *.tar
+
+# Pliki tłumaczeń
+*.mo

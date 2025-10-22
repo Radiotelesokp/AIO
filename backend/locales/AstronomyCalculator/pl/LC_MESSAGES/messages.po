@@ -1,20 +1,20 @@
 msgid "astronomical.calculator.required.name.star"
-msgstr "Dla gwiazd wymagana jest nazwa lub współrzędne."
+msgstr "Dla gwiazd wymagana jest nazwa lub wspolrzedne."
 
 msgid "astronomical.calculator.required.name.custom"
-msgstr "Dla obiektu custom wymagane są współrzędne."
+msgstr "Dla obiektu custom wymagane sa wspolrzedne."
 
 msgid "astronomical.calculator.unsupported.object.type"
-msgstr "Nieobsługiwany typ obiektu:"
+msgstr "Nieobslugiwany typ obiektu:"
 
 msgid "astronomical.calculator.star.not.found"
 msgstr "Nie znaleziono gwiazdy:"
 
 msgid "astronomical.calculator.bad.planet.name"
-msgstr "Nieprawidłowa nazwa planety:"
+msgstr "Nieprawidlowa nazwa planety:"
 
 msgid "observer.location.invalid.latitude.error"
-msgstr "Szerokość geograficzna musi być w zakresie -90° do +90°. Aktualna:"
+msgstr "Szerokosc geograficzna musi byc w zakresie -90* do +90*. Aktualna:"
 
 msgid "observer.location.invalid.longitude.error"
-msgstr "Długość geograficzna musi być w zakresie -180° do +180°. Aktualna:"
+msgstr "Dlugosc geograficzna musi byc w zakresie -180* do +180*. Aktualna:"

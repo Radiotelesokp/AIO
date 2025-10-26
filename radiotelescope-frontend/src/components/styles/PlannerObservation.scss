@@ -1,0 +1,112 @@
+$reservation_color: #ff9900;
+$hover_color: #fbff00;
+$header_color: #f5f5f5;
+$border_color: #ddd;
+$background_color: #fff;
+
+.planner {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  margin:50px;
+  position: relative;
+
+  .header-row {
+    display: flex;
+    background-color: $header_color;
+    font-weight: bold;
+
+    .time-column {
+      width: 72px;
+    }
+
+    .day-column {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid $border_color;
+      text-align: center;
+    }
+  }
+
+  .hour-row {
+    display: flex;
+
+    .time-column {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid $border_color;
+      text-align: center;
+      background-color: $header_color;
+    }
+
+    .day-cell {
+      flex: 1;
+      min-height: 50px;
+      border: 1px solid $border_color;
+      padding: 2px;
+      cursor: pointer;
+      background-color: $background_color;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+
+      &:hover {
+        background-color: $hover_color;
+      }
+
+      .event {
+        background-color: $reservation_color;
+        margin: 1px 0;
+        padding: 2px 4px;
+        border-radius: 3px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+
+        .delete {
+          color: red;
+          cursor: pointer;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal {
+      background: $background_color;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      input {
+        padding: 5px;
+        font-size: 14px;
+      }
+
+      .modal-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        button {
+          padding: 5px 10px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

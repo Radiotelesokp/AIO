@@ -1,0 +1,54 @@
+$red_color: #ff0000;
+$green_color: #0edd0e;
+
+.container {
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  background-color: #333;
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  section {
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #fafafa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+
+    .status-item {
+      border: 2px solid $green_color;
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      &.ok {
+        border-color: $green_color;
+        color: $green_color;
+      }
+
+      &.error {
+        border-color: red;
+        color: red;
+      }
+    }
+  }
+}

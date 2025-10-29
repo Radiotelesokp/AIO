@@ -40,7 +40,7 @@ export default function StatusOfAntenna({ log, updateControlsState }) {
 
   const updateStatus = useCallback(async () => {
     try {
-      const status = await apiCall("/status");
+      const status = await apiCall("/status", "GET");
 
       setIsConnected(status.connected);
       updateConnectionStatus();

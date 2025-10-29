@@ -1,6 +1,4 @@
-/* === STATUS SIDEBAR POSITIONING === */
 .status-sidebar {
-  position: absolute;
   width: 280px;
   background: #111;
   color: #fff;
@@ -14,9 +12,11 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-sizing: content-box;
+  height: fit-content;
+  margin: 20px;
 }
 
-/* === STATUS CONTENT === */
 .status-content {
   display: flex;
   flex-direction: column;
@@ -82,7 +82,6 @@
   background-color: #b10707;
 }
 
-/* === RESPONSIVENESS === */
 @media (max-width: 1024px) {
   .status-sidebar {
     width: 240px;

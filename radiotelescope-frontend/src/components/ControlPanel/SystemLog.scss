@@ -1,4 +1,3 @@
-// === COLOR PALETTE ===
 $red: #ff0000;
 $black: #000000;
 $dark_grey: #111;
@@ -6,7 +5,9 @@ $gray: #222;
 $white: #ffffff;
 
 .log-section {
-  max-width: 700px;
+  position: inherit;
+  max-width: 900px;
+  max-height: 80vh;
   margin: 2rem auto;
   background: $dark_grey;
   border: 1px solid $red;
@@ -68,7 +69,7 @@ $white: #ffffff;
     margin:1rem;
     font-family: "Courier New", monospace;
     font-size: 0.85rem;
-    height: 260px;
+    height: 50vh;
     overflow-y: auto;
     text-align: justify;
     line-height: 1.4;
@@ -145,6 +146,7 @@ $white: #ffffff;
     max-width: 900px;
     .log-box {
       height: 80vh;
+      width: 800px;
     }
   }
 }

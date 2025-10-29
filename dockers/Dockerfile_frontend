@@ -1,4 +1,11 @@
 FROM node:24.10.0-alpine
 
+WORKDIR /frontend
+COPY radiotelescope-frontend .
 
-ENTRYPOINT ["top", "-b"]
+RUN npm install
+
+CMD ["npm", "start"]
+
+
+

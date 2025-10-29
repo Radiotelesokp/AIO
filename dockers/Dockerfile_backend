@@ -2,21 +2,16 @@ FROM python:3.12
 
 WORKDIR /backend
 COPY backend .
-COPY requirements.txt /backend/requirements.txt
 USER root
 
 # Update apt sources and install dependencies
-RUN apt-get update && apt-get install -y \
-    libsoapysdr-dev \
-    soapysdr-tools \
-    python3-soapysdr \
-    soapysdr-module-all \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y python3-soapysdr soapysdr-module-all && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /backend/venv --system-site-packages
-ENV PATH="/backend/venv/bin:$PATH"
-
+RUN python3 -m venv opt/venv --system-site-packages
+ENV PATH="opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir -r requirements.txt
 
+#ENTRYPOINT ["top", "-b"]
 # Default command
-#CMD ["python3", "app.py"]
+CMD ["python3", "app.py"]

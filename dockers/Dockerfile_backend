@@ -1,17 +1,19 @@
-FROM python:3.12
+FROM python:3.12-bullseye
 
 WORKDIR /backend
-COPY backend .
-USER root
 
-# Update apt sources and install dependencies
-RUN apt-get update && apt-get install -y python3-soapysdr soapysdr-module-all && \
+COPY backend/ .
+
+# Install SoapySDR and Python bindings
+RUN apt-get update && \
+    apt-get install -y python3-soapysdr soapysdr-tools  soapysdr-module-all hackrf python3-pip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv opt/venv --system-site-packages
-ENV PATH="opt/venv/bin:$PATH"
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies
+RUN python3 -m venv ./venv --system-site-packages
+RUN . ./venv/bin/activate
+RUN pip install -r requirements.txt
 
-#ENTRYPOINT ["top", "-b"]
 # Default command
-CMD ["python3", "app.py"]
+#CMD ["python3", "app.py"]
+#CMD ["top", "-b"]

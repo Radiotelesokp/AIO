@@ -6,6 +6,3 @@ COPY radiotelescope-frontend .
 RUN npm install
 
 CMD ["npm", "start"]
-
-
-

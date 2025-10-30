@@ -15,7 +15,7 @@ export default function Header() {
         </nav>
       </div>
 
-      <img className="header-main" src="logo192.png" alt="Koło Naukowe Spectrum logo"/>
+      <img className="header-main" src={`${process.env.PUBLIC_URL}/SpektrumLogoBlackCanva.png`} alt="Koło Naukowe Spectrum logo"/>
     </header>
   );
 }

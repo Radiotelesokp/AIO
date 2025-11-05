@@ -2,6 +2,7 @@ import sys
 import SoapySDR
 import logging
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from Engine.Antenna.Model import *
@@ -14,6 +15,14 @@ SoapySDR.setLogLevel(SoapySDR.SOAPY_SDR_FATAL)
 app = FastAPI(title="KN Spectrum - Project Radiotelescope")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 languageHelper = LanguageHelper(language="pl", defaultLanguage="en")
 sdr = None

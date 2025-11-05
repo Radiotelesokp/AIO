@@ -1,8 +1,13 @@
 # Przykład użycia
 from datetime import datetime, timezone
 
-from backend.Engine.AstronomyCalculator import AstronomicalCalculator, AstronomicalTracker, \
-    AstronomicalObjectType
+from Engine.AstronomyCalculator.AstronomicalCalculator import AstronomicalCalculator
+from Engine.AstronomyCalculator.AstronomicalTracker import AstronomicalTracker
+from Engine.AstronomyCalculator.AstronomicalObjectTypeEnum import AstronomicalObjectType
+from Engine.AstronomyCalculator.ObserverLocation import ObserverLocation
+from LanguageHelper import LanguageHelper
+
+languageHelper = LanguageHelper("pl", "en")
 
 # Predefiniowane lokalizacje obserwatoriów
 OBSERVATORIES = {
@@ -11,7 +16,7 @@ OBSERVATORIES = {
 
 def test_astronomic_calculator():
     observer_location = OBSERVATORIES["poznan"]
-    calculator = AstronomicalCalculator(observer_location)
+    calculator = AstronomicalCalculator(observer_location, languageHelper)
     tracker = AstronomicalTracker(calculator)
 
     print(f"Obserwator: {observer_location.name}")

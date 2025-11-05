@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from dataclasses import dataclass, asdict
-from datetime import time
+from datetime import datetime
 from typing import Dict, Any
 
 from ..Constants import DEFAULT_CALIBRATION_FILE
@@ -72,7 +72,7 @@ class PositionCalibration:
                 "max_elevation": self.max_elevation,
                 "max_azimuth_speed": self.max_azimuth_speed,
                 "max_elevation_speed": self.max_elevation_speed,
-                "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
+                "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "version": "2.0",
             }
 
@@ -86,12 +86,12 @@ class PositionCalibration:
             raise AntennaError(f"Cannot save calibration to file {filepath}: {e}")
 
     @classmethod
-    def load_from_file(self, cls, filepath: str = DEFAULT_CALIBRATION_FILE) -> "PositionCalibration":
+    def load_from_file(cls, languageHelper: LanguageHelper, filepath: str = DEFAULT_CALIBRATION_FILE) -> "PositionCalibration":
         """Loads calibration and limits from a JSON file"""
         try:
             if not os.path.exists(filepath):
-                self.__logger.warning(f"Calibration file {filepath} does not exist, using default values")
-                return cls()  # Return default calibration
+                cls.__logger.warning(f"Calibration file {filepath} does not exist, using default values")
+                return cls(languageHelper=languageHelper)  # Return default calibration
 
             with open(filepath, "r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -100,7 +100,7 @@ class PositionCalibration:
             required_fields = ["azimuth_offset", "elevation_offset"]
             for field in required_fields:
                 if field not in data:
-                    self.__logger.warning(f"Missing field '{field}' in calibration file, using default value")
+                    cls.__logger.warning(f"Missing field '{field}' in calibration file, using default value")
 
             calibration = cls(
                 azimuth_offset=float(data.get("azimuth_offset", 0.0)),
@@ -111,15 +111,16 @@ class PositionCalibration:
                 max_elevation=float(data.get("max_elevation", 90.0)),
                 max_azimuth_speed=float(data.get("max_azimuth_speed", 5.0)),
                 max_elevation_speed=float(data.get("max_elevation_speed", 3.0)),
+                languageHelper=languageHelper
             )
 
-            self.__logger.info(f"Calibration loaded from file: {filepath}")
-            self.__logger.info(
+            cls.__logger.info(f"Calibration loaded from file: {filepath}")
+            cls.__logger.info(
                 f"Calibration parameters: "
                 f"az_off={calibration.azimuth_offset:.2f}°, "
                 f"el_off={calibration.elevation_offset:.2f}°"
             )
-            self.__logger.info(
+            cls.__logger.info(
                 f"Limits: az({calibration.min_azimuth}°-{calibration.max_azimuth}°), "
                 f"el({calibration.min_elevation}°-{calibration.max_elevation}°)"
             )
@@ -127,10 +128,10 @@ class PositionCalibration:
             return calibration
 
         except json.JSONDecodeError as e:
-            self.__logger.error(f"JSON parsing error in file {filepath}: {e}")
+            cls.__logger.error(f"JSON parsing error in file {filepath}: {e}")
             raise AntennaError(f"Invalid calibration file format: {e}")
         except Exception as e:
-            self.__logger.error(f"Error while loading calibration: {e}")
+            cls.__logger.error(f"Error while loading calibration: {e}")
             raise AntennaError(f"Cannot load calibration from file {filepath}: {e}")
 
     def export_to_dict(self) -> Dict[str, Any]:
@@ -138,7 +139,7 @@ class PositionCalibration:
         return asdict(self)
 
     @classmethod
-    def import_from_dict(self, cls, data: Dict[str, Any]) -> "PositionCalibration":
+    def import_from_dict(cls, data: Dict[str, Any], languageHelper: LanguageHelper) -> "PositionCalibration":
         """Imports calibration from a dictionary"""
         return cls(
             azimuth_offset=float(data.get("azimuth_offset", 0.0)),
@@ -149,4 +150,5 @@ class PositionCalibration:
             max_elevation=float(data.get("max_elevation", 90.0)),
             max_azimuth_speed=float(data.get("max_azimuth_speed", 5.0)),
             max_elevation_speed=float(data.get("max_elevation_speed", 3.0)),
+            languageHelper=languageHelper
         )

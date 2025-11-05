@@ -1,15 +1,15 @@
 version: "3.9"
 
 services:
-  backend:
-    container_name: backend
-    build:
-      context: ../
-      dockerfile: dockers/Dockerfile_backend
-    ports:
-      - "8000:8000"
-    depends_on:
-      - database
+  #backend:
+  #  container_name: backend
+  #  build:
+  #    context: ../
+  #    dockerfile: dockers/Dockerfile_backend
+  #  ports:
+  #    - "8000:8000"
+  #  depends_on:
+  #    - database
 
   frontend:
     container_name: frontend
@@ -20,7 +20,6 @@ services:
       - "3000:3000"
     depends_on:
       - database
-      - backend
 
   database:
     container_name: database

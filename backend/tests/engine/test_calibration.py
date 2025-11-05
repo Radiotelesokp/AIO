@@ -11,8 +11,10 @@ import os
 import json
 import sys
 
-from backend.Engine.Antenna import AntennaControllerFactory
-from backend.Engine.Antenna.Position import PositionCalibration
+from Engine.Antenna.AntennaControllerFactory import AntennaControllerFactory
+from Engine.Antenna.Position.PositionCalibration import PositionCalibration
+from LanguageHelper import LanguageHelper
+
 
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,6 +26,7 @@ class TestCalibrationPersistence(unittest.TestCase):
         """Przygotowanie testów"""
         self.temp_dir = tempfile.mkdtemp()
         self.test_file = os.path.join(self.temp_dir, "test_calibration.json")
+        self.languageHelper = LanguageHelper("pl", "en")
 
     def tearDown(self):
         """Czyszczenie po testach"""
@@ -35,6 +38,7 @@ class TestCalibrationPersistence(unittest.TestCase):
         """Test zapisywania i wczytywania kalibracji"""
         # Utwórz testową kalibrację
         original = PositionCalibration(
+            languageHelper=self.languageHelper,
             azimuth_offset=45.5,
             elevation_offset=-12.3,
             min_azimuth=0.0,
@@ -90,6 +94,7 @@ class TestCalibrationPersistence(unittest.TestCase):
     def test_export_import_dict(self):
         """Test eksportu/importu do/z słownika"""
         original = PositionCalibration(
+            languageHelper = self.languageHelper,
             azimuth_offset=30.0,
             elevation_offset=5.5,
             min_azimuth=0.0,
@@ -110,7 +115,7 @@ class TestCalibrationPersistence(unittest.TestCase):
             self.assertIn(key, data_dict)
 
         # Import ze słownika
-        imported = PositionCalibration.import_from_dict(data_dict)
+        imported = PositionCalibration.import_from_dict(data_dict, self.languageHelper)
 
         # Sprawdź czy wartości są identyczne
         self.assertAlmostEqual(original.azimuth_offset, imported.azimuth_offset, places=1)
@@ -123,6 +128,7 @@ class TestCalibrationPersistence(unittest.TestCase):
     def test_json_file_format(self):
         """Test formatu pliku JSON"""
         calibration = PositionCalibration(
+            languageHelper = self.languageHelper,
             azimuth_offset=60.0,
             elevation_offset=-5.0,
             min_azimuth=0.0,
@@ -169,9 +175,11 @@ class TestAntennaControllerCalibration(unittest.TestCase):
         """Przygotowanie testów"""
         self.temp_dir = tempfile.mkdtemp()
         self.test_file = os.path.join(self.temp_dir, "controller_calibration.json")
+        self.languageHelper = LanguageHelper("pl", "en")
         
         # Utwórz kontroler symulatora
-        self.controller = AntennaControllerFactory.create_simulator_controller(
+        self.controller = AntennaControllerFactory(self.languageHelper).create_simulator_controller(
+            self.languageHelper,
             simulation_speed=5000.0,
             calibration_file=self.test_file
         )
@@ -187,6 +195,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
     def test_automatic_calibration_save_on_set(self):
         """Test automatycznego zapisywania kalibracji przy ustawianiu"""
         new_calibration = PositionCalibration(
+            languageHelper=self.languageHelper,
             azimuth_offset=90.0,
             elevation_offset=10.0
         )
@@ -201,6 +210,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
         loaded = PositionCalibration.load_from_file(self.test_file)
         self.assertAlmostEqual(loaded.azimuth_offset, 90.0, places=1)
         self.assertAlmostEqual(loaded.elevation_offset, 10.0, places=1)
+
 
     def test_manual_save_load(self):
         """Test ręcznego zapisywania i wczytywania"""
@@ -245,6 +255,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
         """Test czy status zawiera informacje o kalibracji"""
         # Ustaw testową kalibrację
         test_cal = PositionCalibration(
+            languageHelper=self.languageHelper,
             azimuth_offset=30.0,
             elevation_offset=15.0,
             min_azimuth=0.0,

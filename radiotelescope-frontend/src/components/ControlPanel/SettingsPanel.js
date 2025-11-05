@@ -453,13 +453,11 @@ const getObserverLocation = async () => {
             </div>
 
             <div className="button-group">
-              <button onClick={getSignal}>Wyślij sygnał</button>
+              <button onClick={sendSignal}>Wyślij sygnał</button>
             </div>
           </div>
-          
-          
         </div>
-          )}
+      )}
     </div>
   );
 }

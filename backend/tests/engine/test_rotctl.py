@@ -15,15 +15,18 @@ import time
 import logging
 import os
 
-from backend.Engine.Antenna import DEFAULT_BAUDRATE, DEFAULT_CALIBRATION_FILE, DEFAULT_SPID_PORT
-from backend.Engine.Antenna.Position import PositionCalibration
-
+from Engine.Antenna.Constants import DEFAULT_BAUDRATE, DEFAULT_CALIBRATION_FILE, DEFAULT_SPID_PORT
+from Engine.Antenna.Position.PositionCalibration import PositionCalibration
+from Engine.Antenna.AntennaControllerService import AntennaControllerService
+from LanguageHelper import LanguageHelper
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Konfiguracja logowania
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+languageHelper = LanguageHelper("pl","en")
+antennaService = AntennaControllerService(languageHelper)
 
 def ustaw_pozycje(port: str, az: float, el: float, speed: int = DEFAULT_BAUDRATE, apply_calibration: bool = True):
     """Ustawia pozycję rotatora SPID MD-03 za pomocą rotctl (Hamlib)"""
@@ -262,7 +265,7 @@ class SPIDProtocolTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Sprawdzenie czy rotctl jest dostępne przed rozpoczęciem testów."""
-        if not sprawdz_rotctl():
+        if not antennaService.check_rotctl():
             raise unittest.SkipTest("rotctl (Hamlib) nie jest dostępne w systemie")
 
         logger.info("=" * 60)

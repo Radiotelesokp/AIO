@@ -15,9 +15,9 @@ import time
 import logging
 import sys
 
-from backend.Engine.Antenna import AntennaControllerFactory, Position
-from backend.Engine.Antenna.AntennaControllerHelper import AntennaState, SafetyError
-from backend.Engine.AstronomyCalculator import ObserverLocation, AstronomicalCalculator, AstronomicalTracker
+from Engine.Antenna import AntennaControllerFactory, Position
+from Engine.Antenna.AntennaControllerHelper import AntennaState, SafetyError
+from Engine.AstronomyCalculator import ObserverLocation, AstronomicalCalculator, AstronomicalTracker
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 

@@ -1,8 +1,11 @@
 import time
 import logging
-from backend.Engine.Antenna import Position, AntennaControllerFactory, DEFAULT_BAUDRATE
-from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
-from backend.Engine.Antenna.Motor import MotorConfig
+from Engine.Antenna import Position, AntennaControllerFactory, DEFAULT_BAUDRATE
+from Engine.Antenna.AntennaControllerHelper import AntennaState
+from Engine.Antenna.Motor import MotorConfig
+from LanguageHelper import LanguageHelper
+
+languageHelper = LanguageHelper("pl", "en")
 
 # Przykład użycia
 if __name__ == "__main__":
@@ -35,7 +38,7 @@ if __name__ == "__main__":
         # Fallback na symulator jeśli nie można połączyć z prawdziwym urządzeniem
         print(f"Nie można połączyć z SPID ({e}), przełączam na symulator")
         controller = AntennaControllerFactory.create_simulator_controller(
-            simulation_speed=2000.0, motor_config=motor_config
+            simulation_speed=2000.0, motor_config=motor_config, languageHelper= languageHelper
         )
         print("Utworzono symulator (brak dostępu do prawdziwego urządzenia)")
 

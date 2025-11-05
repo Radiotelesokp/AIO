@@ -13,7 +13,7 @@ import sys
 import time
 import os
 
-from backend.Engine.Antenna import DEFAULT_ROTCTL_MODEL, DEFAULT_BAUDRATE, DEFAULT_SPID_PORT
+from Engine.Antenna.Constants import DEFAULT_ROTCTL_MODEL, DEFAULT_BAUDRATE, DEFAULT_SPID_PORT
 
 # Dodaj ścieżkę do głównego folderu projektu
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

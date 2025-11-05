@@ -1,0 +1,12 @@
+{
+    "azimuth_offset": 45.5,
+    "elevation_offset": -12.3,
+    "min_azimuth": 0.0,
+    "max_azimuth": 360.0,
+    "min_elevation": 0.0,
+    "max_elevation": 90.0,
+    "max_azimuth_speed": 10.0,
+    "max_elevation_speed": 8.0,
+    "created_at": "2025-11-05 13:02:48",
+    "version": "2.0"
+}

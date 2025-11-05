@@ -35,7 +35,7 @@ class AntennaController:
         if position_calibration is not None:
             self.position_calibration = position_calibration
         else:
-            self.position_calibration = PositionCalibration.load_from_file(self.calibration_file)
+            self.position_calibration = PositionCalibration.load_from_file(self.__languageHelper, self.calibration_file)
 
         # Set limits - use limits from calibration if none were provided
         if limits is not None:
@@ -180,7 +180,7 @@ class AntennaController:
     def load_calibration(self, filepath: Optional[str] = None, update_limits: bool = True) -> None:
         """Loads calibration from a file"""
         file_to_use = filepath or self.calibration_file
-        self.position_calibration = PositionCalibration.load_from_file(file_to_use)
+        self.position_calibration = PositionCalibration.load_from_file(self.__languageHelper, file_to_use)
 
         # Update limits based on loaded calibration
         if update_limits:

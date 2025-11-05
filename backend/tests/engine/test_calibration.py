@@ -9,30 +9,21 @@ import unittest
 import tempfile
 import os
 import json
-import sys
+from pathlib import Path
 
 from Engine.Antenna.AntennaControllerFactory import AntennaControllerFactory
 from Engine.Antenna.Position.PositionCalibration import PositionCalibration
 from LanguageHelper import LanguageHelper
-
-
-# Dodaj ścieżkę do głównego folderu projektu
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class TestCalibrationPersistence(unittest.TestCase):
     """Testy dla funkcji zapisywania/odczytywania kalibracji"""
 
     def setUp(self):
         """Przygotowanie testów"""
-        self.temp_dir = tempfile.mkdtemp()
+        self.main_dir = Path(__file__).resolve().parent.parent.parent
+        self.temp_dir = os.path.join(self.main_dir,'tests/engine/resource')
         self.test_file = os.path.join(self.temp_dir, "test_calibration.json")
         self.languageHelper = LanguageHelper("pl", "en")
-
-    def tearDown(self):
-        """Czyszczenie po testach"""
-        if os.path.exists(self.test_file):
-            os.remove(self.test_file)
-        os.rmdir(self.temp_dir)
 
     def test_save_and_load_calibration(self):
         """Test zapisywania i wczytywania kalibracji"""
@@ -54,7 +45,7 @@ class TestCalibrationPersistence(unittest.TestCase):
         self.assertTrue(os.path.exists(self.test_file))
 
         # Wczytaj z pliku
-        loaded = PositionCalibration.load_from_file(self.test_file)
+        loaded = PositionCalibration.load_from_file(self.languageHelper, self.test_file)
 
         # Sprawdź czy wartości są identyczne
         self.assertAlmostEqual(original.azimuth_offset, loaded.azimuth_offset, places=1)
@@ -71,7 +62,7 @@ class TestCalibrationPersistence(unittest.TestCase):
         nonexistent_file = os.path.join(self.temp_dir, "nonexistent.json")
         
         # Should return default calibration without raising exception
-        calibration = PositionCalibration.load_from_file(nonexistent_file)
+        calibration = PositionCalibration.load_from_file(self.languageHelper, nonexistent_file)
         
         # Check default values
         self.assertEqual(calibration.azimuth_offset, 0.0)
@@ -89,7 +80,7 @@ class TestCalibrationPersistence(unittest.TestCase):
 
         # Powinien rzucić wyjątek
         with self.assertRaises(Exception):
-            PositionCalibration.load_from_file(self.test_file)
+            PositionCalibration.load_from_file(self.languageHelper, self.test_file)
 
     def test_export_import_dict(self):
         """Test eksportu/importu do/z słownika"""
@@ -173,7 +164,8 @@ class TestAntennaControllerCalibration(unittest.TestCase):
 
     def setUp(self):
         """Przygotowanie testów"""
-        self.temp_dir = tempfile.mkdtemp()
+        self.main_dir = Path(__file__).resolve().parent.parent.parent
+        self.temp_dir = os.path.join(self.main_dir, 'tests/engine/resource')
         self.test_file = os.path.join(self.temp_dir, "controller_calibration.json")
         self.languageHelper = LanguageHelper("pl", "en")
         
@@ -188,9 +180,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
     def tearDown(self):
         """Czyszczenie po testach"""
         self.controller.shutdown()
-        if os.path.exists(self.test_file):
-            os.remove(self.test_file)
-        os.rmdir(self.temp_dir)
+
 
     def test_automatic_calibration_save_on_set(self):
         """Test automatycznego zapisywania kalibracji przy ustawianiu"""
@@ -207,7 +197,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
         self.assertTrue(os.path.exists(self.test_file))
 
         # Wczytaj z pliku i sprawdź wartości
-        loaded = PositionCalibration.load_from_file(self.test_file)
+        loaded = PositionCalibration.load_from_file(self.languageHelper, self.test_file)
         self.assertAlmostEqual(loaded.azimuth_offset, 90.0, places=1)
         self.assertAlmostEqual(loaded.elevation_offset, 10.0, places=1)
 
@@ -247,7 +237,7 @@ class TestAntennaControllerCalibration(unittest.TestCase):
         self.assertAlmostEqual(self.controller.position_calibration.elevation_offset, 0.0, places=1)
 
         # Sprawdź czy zostało zapisane do pliku
-        loaded = PositionCalibration.load_from_file(self.test_file)
+        loaded = PositionCalibration.load_from_file(self.languageHelper, self.test_file)
         self.assertAlmostEqual(loaded.azimuth_offset, 0.0, places=1)
         self.assertAlmostEqual(loaded.elevation_offset, 0.0, places=1)
 

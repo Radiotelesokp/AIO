@@ -1,19 +1,41 @@
-FROM python:3.12-bullseye
+FROM python:3.11-bullseye
 
 WORKDIR /backend
 
 COPY backend/ .
 
-# Install SoapySDR and Python bindings
+# Install SoapySDR dependencies and tools
 RUN apt-get update && \
-    apt-get install -y python3-soapysdr soapysdr-tools  soapysdr-module-all hackrf python3-pip && \
+    apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    libusb-1.0-0-dev \
+    pkg-config \
+    soapysdr-tools \
+    soapysdr-module-all \
+    hackrf \
+    libhackrf-dev \
+    python3-pip \
+    python3-dev \
+    python3-distutils \
+    swig \
+    libsoapysdr-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-RUN python3 -m venv ./venv --system-site-packages
-RUN . ./venv/bin/activate
-RUN pip install -r requirements.txt
+# Build and install SoapySDR Python bindings manually
+RUN git clone https://github.com/pothosware/SoapySDR.git /tmp/SoapySDR && \
+    cd /tmp/SoapySDR && \
+    git checkout soapy-sdr-0.8.1 && \
+    mkdir build && cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_PYTHON3=ON .. && \
+    make && \
+    make install && \
+    ldconfig && \
+    rm -rf /tmp/SoapySDR
+
+# Install Python dependencies using system Python
+RUN pip install --break-system-packages -r requirements.txt
 
 # Default command
-#CMD ["python3", "app.py"]
-#CMD ["top", "-b"]
+CMD ["python3", "app.py"]

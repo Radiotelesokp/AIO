@@ -115,11 +115,9 @@ class AntennaController:
     def _validate_position(self, position: Position) -> None:
         """Validates a position against mechanical limits"""
         if not (self.limits.min_azimuth <= position.azimuth <= self.limits.max_azimuth):
-            raise SafetyError(f"{self._('antenna.azimuth.out.of.range.error')
-                              .format(azimuth=position.azimuth, min_azimuth=self.limits.min_azimuth, max_azimuth=self.limits.max_azimuth)}")
+            raise SafetyError(f"{self._('antenna.azimuth.out.of.range.error').format(azimuth=position.azimuth, min_azimuth=self.limits.min_azimuth, max_azimuth=self.limits.max_azimuth)}")
         if not self.limits.min_elevation <= position.elevation <= self.limits.max_elevation:
-            raise SafetyError(f"{self._('antenna.elevation.out.of.range.error')
-                              .format(el=position.elevation,min_el=self.limits.min_elevation, max_el=self.limits.max_elevation)}")
+            raise SafetyError(f"{self._('antenna.elevation.out.of.range.error').format(el=position.elevation,min_el=self.limits.min_elevation, max_el=self.limits.max_elevation)}")
 
     def move_to(self, position: Position) -> None:
         """Moves the antenna to the specified position (with calibration applied)"""

@@ -236,8 +236,7 @@ class EngineServiceRest:
                 position = calculator.get_star_position(object_name)
 
             if position is None or not position.is_visible:
-                return JSONResponse(status_code=404, content={"message": f"{self._('rest.antenna.object.is.not.visible')
-                                    .format(name=object_name)}"})
+                return JSONResponse(status_code=404, content={"message": f"{self._('rest.antenna.object.is.not.visible').format(name=object_name)}"})
 
             # Convert to antenna position and move
             antenna_position = position.to_antenna_position()
@@ -245,8 +244,7 @@ class EngineServiceRest:
                 controller.move_to(antenna_position)
             else:
                 return JSONResponse(status_code=400,
-                                    content={"message": f"{self._('rest.antenna.object.out.of.range.error')
-                                    .format(name=object_name)}"})
+                                    content={"message": f"{self._('rest.antenna.object.out.of.range.error').format(name=object_name)}"})
 
             self.__logger.info(f"Antenna moved to object: {object_name}")
             return JSONResponse(status_code=200, content={

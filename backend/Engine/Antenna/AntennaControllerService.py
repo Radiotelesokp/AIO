@@ -52,7 +52,8 @@ class AntennaControllerService:
         normalized_az = az % 360
 
         if AntennaLimits.max_elevation < abs(el):  # check limits
-            raise SafetyError(f"{self._("rotctl.motor.elevation.out.of.range.error").format(el=el)}")
+            error_msg = self._("rotctl.motor.elevation.out.of.range.error").format(el=el)
+            raise SafetyError(error_msg)
         self.__logger.info(f"Rotctl: Sending position command - Az={normalized_az:.1f}°, El={el:.1f}°")
 
         for attempt in range(retry_count + 1):
@@ -70,8 +71,9 @@ class AntennaControllerService:
                         self.__logger.warning(f"Attempt {attempt + 1} failed, code: {proc.returncode}, error: '{error_msg}', retrying...")
                         time.sleep(1)
                     else:
-                        raise CommunicationError(f"{self._('rotctl.motor.setting.position.error').format(
-                            normalized_az=normalized_az, el=el, code =proc.returncode, error_msg=error_msg)}")
+                        raise CommunicationError(
+                            f"{self._('rotctl.motor.setting.position.error').format(normalized_az=normalized_az, el=el, code=proc.returncode, error_msg=error_msg)}"
+                        )
 
             except subprocess.TimeoutExpired:
                 proc.kill()
@@ -107,7 +109,7 @@ class AntennaControllerService:
             RuntimeError: If the read fails after all attempts
         """
         if not self.check_rotctl():
-            raise RuntimeError(f"{self._("rotctl.motor.hamlib.is.unavailable.error")}")
+            raise RuntimeError(f"{self._('rotctl.motor.hamlib.is.unavailable.error')}")
 
         for attempt in range(retry_count + 1):
             proc = subprocess.Popen(
@@ -189,7 +191,7 @@ class AntennaControllerService:
             RuntimeError: If the command fails
         """
         if not self.check_rotctl():
-            raise RuntimeError(f"{self._("rotctl.motor.hamlib.is.unavailable.error")}")
+            raise RuntimeError(f"{self._('rotctl.motor.hamlib.is.unavailable.error')}")
 
         proc = subprocess.Popen(["rotctl", "-m", model, "-r", port, "-s", str(speed), "-"],
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -198,16 +200,16 @@ class AntennaControllerService:
             stdout, stderr = proc.communicate(input="S\n", timeout=10)
 
             if proc.returncode != 0:
-                raise CommunicationError(f"{self._("rotctl.motor.cannot.stop.antena.proc.error")} {stderr.strip()}")
+                raise CommunicationError(f"{self._('rotctl.motor.cannot.stop.antena.proc.error')} {stderr.strip()}")
 
             self.__logger.info("Rotor stopped using rotctl")
             return stdout.strip()
 
         except subprocess.TimeoutExpired:
             proc.kill()
-            raise TimeoutError({self._("rotctl.motor.cannot.stop.antena.timeout.error")})
+            raise TimeoutError(f"{self._('rotctl.motor.cannot.stop.antena.timeout.error')}")
         except Exception as e:
-            raise AntennaError(f"{self._("rotctl.motor.cannot.stop.antena.error")}: {e}")
+            raise AntennaError(f"{self._('rotctl.motor.cannot.stop.antena.error')}: {e}")
 
     def run_rotctl_command(self, command: list[str], model: str = DEFAULT_ROTCTL_MODEL,
                            port: str = DEFAULT_SPID_PORT, baudrate: int = DEFAULT_BAUDRATE, timeout: int = 10
@@ -248,7 +250,7 @@ class AntennaControllerService:
     def get_best_spid_port(self, preferred_port: Optional[str] = None) -> str:
         """ Returns the best port for the SPID controller. Checks if rotctl is available. """
         if not self.check_rotctl():
-            raise RuntimeError(f"{self._("rotctl.motor.hamlib.is.unavailable.error")}")
+            raise RuntimeError(f"{self._('rotctl.motor.hamlib.is.unavailable.error')}")
 
         if preferred_port:
             self.__logger.info(f"Using provided port: {preferred_port}")

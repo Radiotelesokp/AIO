@@ -17,6 +17,6 @@ class ObserverLocation:
         self._ = self.languageHelper.getTranslatedMessage("AstronomyCalculator")
         """Coordinates validation"""
         if not (-90 <= self.latitude <= 90):
-            raise ValueError(f"{self._("observer.location.invalid.latitude.error")} {self.latitude}")
+            raise ValueError(f"{self._('observer.location.invalid.latitude.error')} {self.latitude}")
         if not (-180 <= self.longitude <= 180):
-            raise ValueError(f"{self._("observer.location.invalid.longitude.error")} {self.longitude}")
+            raise ValueError(f"{self._('observer.location.invalid.longitude.error')} {self.longitude}")

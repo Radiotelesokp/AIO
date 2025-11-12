@@ -4,18 +4,13 @@ from datetime import datetime, timezone
 from Engine.AstronomyCalculator.AstronomicalCalculator import AstronomicalCalculator
 from Engine.AstronomyCalculator.AstronomicalTracker import AstronomicalTracker
 from Engine.AstronomyCalculator.AstronomicalObjectTypeEnum import AstronomicalObjectType
-from Engine.AstronomyCalculator.ObserverLocation import ObserverLocation
+from Engine.ObservatoryConfig import get_observer_location
 from LanguageHelper import LanguageHelper
 
 languageHelper = LanguageHelper("pl", "en")
 
-# Predefiniowane lokalizacje obserwatoriów
-OBSERVATORIES = {
-    "poznan": ObserverLocation(languageHelper,52.40030228321106, 16.955077591791788, 60, "Poznań Polanka")
-}
-
 def test_astronomic_calculator():
-    observer_location = OBSERVATORIES["poznan"]
+    observer_location = get_observer_location("polanka", languageHelper)
     calculator = AstronomicalCalculator(observer_location, languageHelper)
     tracker = AstronomicalTracker(calculator)
 

@@ -38,6 +38,7 @@ from Engine.Antenna import AntennaControllerFactory
 from Engine.Antenna.AntennaControllerHelper import AntennaState
 from Engine.Antenna.Position import Position, PositionCalibration
 from Engine.Antenna.Motor import MotorConfig
+from Engine.ObservatoryConfig import OBSERVATORIES, get_observer_location
 from backend.LanguageHelper import LanguageHelper
 
 # Konfiguracja logowania
@@ -46,23 +47,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-
-# Predefiniowane lokalizacje obserwatoriów
-OBSERVATORIES = {
-    "polanka": {
-        "name": "Poznań Polanka",
-        "latitude": 52.40030228321106,
-        "longitude": 16.955077591791788,
-        "elevation": 60.0
-    },
-    "krakow": {
-        "name": "Kraków",
-        "latitude": 50.0647,
-        "longitude": 19.9450,
-        "elevation": 219.0
-    }
-}
 
 
 class SpiralSunCalibration:
@@ -370,14 +354,7 @@ def main():
         logger.warning(f"Nieznana lokalizacja '{location_key}', używam domyślnej: polanka")
         location_key = "polanka"
     
-    obs_data = OBSERVATORIES[location_key]
-    observer = ObserverLocation(
-        language_helper,
-        latitude=obs_data['latitude'],
-        longitude=obs_data['longitude'],
-        elevation=obs_data['elevation'],
-        name=obs_data['name']
-    )
+    observer = get_observer_location(location_key, language_helper)
     
     logger.info(f"✓ Lokalizacja: {observer.name}")
     logger.info(f"  Współrzędne: {observer.latitude:.4f}°N, {observer.longitude:.4f}°E")

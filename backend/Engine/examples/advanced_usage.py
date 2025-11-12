@@ -19,13 +19,10 @@ from backend.Engine.Antenna.AntennaControllerHelper import AntennaState
 from backend.Engine.Antenna import AntennaControllerFactory, DEFAULT_SPID_PORT, DEFAULT_BAUDRATE
 from backend.Engine.Antenna.Motor import MotorConfig
 from backend.Engine.AstronomyCalculator import AstronomicalCalculator, AstronomicalObjectType
+from backend.Engine.ObservatoryConfig import get_observer_location
+from backend.LanguageHelper import LanguageHelper
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Predefiniowane lokalizacje obserwatoriów
-OBSERVATORIES = {
-    "poznan": ObserverLocation(languageHelper,52.40030228321106, 16.955077591791788, 60, "Poznań Polanka")
-}
 
 # Dodanie wyjątku SafetyError dla przypadku przekroczenia limitów
 class SafetyError(Exception):
@@ -41,7 +38,8 @@ def track_sun_realtime():
     print("=== Śledzenie Słońca w czasie rzeczywistym ===")
 
     # Konfiguracja lokalizacji
-    observer_location = OBSERVATORIES['poznan']
+    language_helper = LanguageHelper(language="pl", defaultLanguage="en")
+    observer_location = get_observer_location('polanka', language_helper)
     print(f"Lokalizacja: {observer_location.name} "
           f"({observer_location.latitude:.4f}°N, {observer_location.longitude:.4f}°E)")
 
@@ -158,7 +156,8 @@ def track_sun_with_prediction():
     print("\n=== PRZYKŁAD 2: Śledzenie Słońca z predykcją ścieżki ===")
 
     # Konfiguracja lokalizacji
-    observer_location = OBSERVATORIES['poznan']
+    language_helper = LanguageHelper(language="pl", defaultLanguage="en")
+    observer_location = get_observer_location('polanka', language_helper)
 
     # Konfiguracja kalkulatora astronomicznego
     calculator = AstronomicalCalculator(observer_location)

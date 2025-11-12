@@ -1,0 +1,42 @@
+# Bias-Tee endpoints
+msgid "bias.tee.get.error.message"
+msgstr "Blad podczas pobierania statusu Bias-Tee:"
+
+msgid "bias.tee.get.success.message"
+msgstr "Status Bias-Tee:"
+
+msgid "bias.tee.set.error.message"
+msgstr "Blad podczas ustawiania statusu Bias-Tee:"
+
+msgid "bias.tee.set.success.message"
+msgstr "Status Bias-Tee ustawiony na:"
+
+# Bias-Tee errors
+msgid "bias.tee.unsupported.action"
+msgstr "Nieobslugiwana operacja Bias-Tee"
+
+# SDR errors
+msgid "spectrum.scanner.convertion.to.float.error"
+msgstr "Konwersja na typ float nie powiodla sie dla wartosci:"
+
+msgid "spectrum.scanner.convertion.to.int.error"
+msgstr "Konwersja na typ int nie powiodla sie dla wartosci:"
+
+msgid "spectrum.scanner.files.dont.error"
+msgstr "Plik {max_file} lub {mean_file} nie istnieje"
+
+# SDR endpoints
+msgid "sdr.scan.value.error.message"
+msgstr "Podano niepoprawne parametry. Blad:"
+
+msgid "sdr.scan.unexpected.error.message"
+msgstr "SDR napotkal problem podczas odbioru sygnalu:"
+
+msgid "sdr.scan.success.message"
+msgstr "Sygnal zostal pomyslnie wyslany."
+
+msgid "sdr.send.value.error.message"
+msgstr "Podano niepoprawne parametry. Blad:"
+
+msgid "sdr.send.unexpected.error.message"
+msgstr "SDR napotkal problem podczas wysylania sygnalu:"

@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ../
+      dockerfile: dockers/Dockerfile_backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ../
+      dockerfile: dockers/Dockerfile_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    build:
+      context: ./
+      dockerfile: Dockerfile_database
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=spectrum
+    ports:
+      - "5432:5432"
+
+

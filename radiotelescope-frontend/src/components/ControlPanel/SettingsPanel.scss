@@ -1,0 +1,261 @@
+$red: #ff0000;
+$black: #000000;
+$dark_grey: #111;
+$gray: #222;
+$white: #ffffff;
+
+.settings-container {
+  position: relative;
+  right: 0;
+  top: 0;
+  height: calc(100vh - 6rem);
+  overflow-y: auto;
+  background: $dark_grey;
+  border-left: 1px solid $red;
+  color: $white;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  scrollbar-width: thin;
+
+  
+
+  .tabs{
+
+    .tab{
+      flex: 1;
+      background: $gray;
+      color: $white;
+      width: 50%;
+      height: 50px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        color: $red;
+      }
+
+      &.active {
+        color: $red;
+      }
+    }
+  }
+
+  .settings-section{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 330px;
+    padding: 1.2rem;
+    .card {
+      background: $gray;
+      border-radius: 0.75rem;
+      padding: 1rem 1.25rem;
+
+      h3 {
+        color: $white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+      }
+
+      .button-refresh {
+          flex: 1;
+          background: $gray;
+          border: 1px solid $red;
+          color: $white;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          font-weight: 500;
+          transition: all 0.2s;
+
+          &:hover {
+            background: $red;
+            color: #fff;
+          }
+
+          &:active {
+            transform: scale(0.97);
+          }
+        }
+      
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.9rem;
+
+        label {
+          color: $white;
+          font-weight: 500;
+          margin-bottom: 0.3rem;
+        }
+
+        input,
+        select {
+          background: $gray;
+          border: 1px solid $red;
+          color: $white;
+          border-radius: 0.5rem;
+          padding: 0.45rem;
+          transition: 0.2s;
+
+          &:focus {
+            border-color: $red;
+            background: $gray;
+          }
+        }
+
+        .input-group {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            flex-shrink: 0;
+          }
+        }
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        button {
+          flex: 1;
+          background: $gray;
+          border: 1px solid $red;
+          color: $white;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          cursor: pointer;
+          font-weight: 500;
+          transition: all 0.2s;
+
+          &:hover {
+            background: $red;
+            color: #fff;
+          }
+
+          &:active {
+            transform: scale(0.97);
+          }
+        }
+      }
+
+      .manual-control {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+
+        .axis-control {
+          flex: 1;
+          text-align: center;
+
+          h4 {
+            font-size: 0.9rem;
+            color: $white;
+            margin-bottom: 0.3rem;
+          }
+
+          .axis-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+
+            button {
+              width: 2rem;
+              height: 2rem;
+              border-radius: 50%;
+              border: 1px solid $red;
+              background: $gray;
+              color: $white;
+              font-size: 1rem;
+              cursor: pointer;
+              transition: 0.2s;
+
+              &:hover {
+                background: $red;
+                color: $white;
+                transform: scale(1.05);
+              }
+            }
+
+            span {
+              font-weight: bold;
+              color: $white;
+            }
+          }
+        }
+      }
+
+      .astronomical-objects {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+
+        .object-button {
+          background: $gray;
+          border: 1px solid $red;
+          color: $white;
+          border-radius: 0.5rem;
+          padding: 0.3rem 0.7rem;
+          cursor: pointer;
+          transition: 0.2s;
+
+          &:hover {
+            background: $red;
+            color: $white;
+          }
+
+          &.selected {
+            background: $red;
+            color: $white;
+            border-color: $red;
+          }
+        }
+      }
+    }
+
+    .advanced-options-toggle {
+      background: transparent;
+      border: 1px solid $red;
+      color: $white;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 500;
+      transition: 0.2s;
+
+      &:hover {
+        background: $red;
+        color: $white;
+      }
+    }
+
+    .advanced-options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .settings-section {
+    position: relative;
+    right: 0;
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 2px solid rgba(239, 68, 68, 0.3);
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,152 @@
+msgid "position.azimuth.limit.error"
+msgstr "Azimuth must be in the range 0-360*, received:"
+
+msgid "simulator.motor.is.disconnected"
+msgstr "Simulator is not connected."
+
+msgid "rotctl.motor.hamlib.is.unavailable.error"
+msgstr "Rotctl (Hamlib) is not available on this system."
+
+msgid "rotctl.motor.cannot.connect.via.rotctl.error"
+msgstr "Cannot connect via rotctl:"
+
+msgid "rotctl.motor.driver.disconnected.error"
+msgstr "Rotctl driver is not connected."
+
+msgid "rotctl.motor.cannot.move.antena.error"
+msgstr "Cannot move antenna via rotctl:"
+
+msgid "rotctl.motor.cannot.stop.antena.error"
+msgstr "Cannot stop antenna via rotctl:"
+
+msgid "rotctl.motor.cannot.stop.antena.timeout.error"
+msgstr "Timeout while stopping the rotor via rotctl."
+
+msgid "rotctl.motor.cannot.stop.antena.proc.error"
+msgstr "Problem with process while stopping rotor:"
+
+msgid "rotctl.motor.elevation.out.of.range.error"
+msgstr "Elevation {el:.1f}* is out of allowed range (-90* to +90*)."
+
+msgid "rotctl.motor.setting.position.error"
+msgstr "Rotctl error while setting position Az={normalized_az:.1f}*, El={el:.1f}*: code {code}, error: '{error_msg}'."
+
+msgid "rotctl.motor.communication.error"
+msgstr "Error communicating with rotctl:"
+
+msgid "rotctl.motor.timeout.set.after.all.attempts"
+msgstr "Timeout while setting position with rotctl after all attempts."
+
+msgid "rotctl.motor.incomplete.position.response"
+msgstr "Incomplete rotctl position response:"
+
+msgid "rotctl.motor.reading.position.error"
+msgstr "Error while reading position from rotctl:"
+
+msgid "rotctl.motor.timeout.reading.after.all.attempts"
+msgstr "Timeout while reading position from rotctl after all attempts."
+
+msgid "antenna.initialization.error"
+msgstr "Initialization error:"
+
+msgid "antenna.azimuth.out.of.range.error"
+msgstr "Azimuth {azimuth}* out of limits ({min_azimuth}*-{max_azimuth}*)."
+
+msgid "antenna.elevation.out.of.range.error"
+msgstr "Elevation {el}* out of limits ({min_el}*-{max_el}*)."
+
+msgid "antenna.error.state"
+msgstr "System is in error state - movement not possible."
+
+msgid "antenna.movement.error"
+msgstr "Movement error:"
+
+msgid "antenna.stop.error"
+msgstr "Stop error:"
+
+msgid "antenna.timeout.movement.error"
+msgstr "Movement timeout exceeded ({timeout}s), no movement for {time_site}s."
+
+msgid "rest.antenna.connection.error"
+msgstr "Connection error:"
+
+msgid "rest.antenna.unable.retrieve.position"
+msgstr "Unable to retrieve position."
+
+msgid "rest.antenna.retrieving.position.error"
+msgstr "Error retrieving position:"
+
+msgid "rest.antenna.setting.position.error"
+msgstr "Error setting position:"
+
+msgid "rest.antenna.stopping.antenna.error"
+msgstr "Error stopping antenna:"
+
+msgid "rest.antenna.setting.location.error"
+msgstr "Error setting observer location:"
+
+msgid "rest.antenna.location.not.set"
+msgstr "Observer location not set."
+
+msgid "rest.antenna.object.is.not.visible"
+msgstr "Object {name} is not visible."
+
+msgid "rest.antenna.object.out.of.range.error"
+msgstr "Object {name} is out of antenna range."
+
+msgid "rest.antenna.error.moving.to.object"
+msgstr "Error moving to object:"
+
+msgid "rest.antenna.tracking.is.active"
+msgstr "Tracking is already active. Stop it first."
+
+msgid "rest.antenna.starting.tracking.error"
+msgstr "Error starting tracking:"
+
+msgid "rest.antenna.stopping.tracking.error"
+msgstr "Error stopping tracking:"
+
+msgid "rest.antenna.listing.ports.error"
+msgstr "Error listing ports:"
+
+msgid "rest.antenna.diagnostic.error"
+msgstr "Diagnostic error:"
+
+msgid "rest.antenna.invalid.astronomical.object"
+msgstr "Invalid astronomical object:"
+
+msgid "rest.antenna.position.computing.error"
+msgstr "Error computing position:"
+
+msgid "rest.antenna.unable.position.computing.error"
+msgstr "Unable to compute position for object:"
+
+msgid "rest.antenna.azimuth.calibration.error"
+msgstr "Azimuth calibration error:"
+
+msgid "rest.antenna.fetching.calibration.error"
+msgstr "Error fetching calibration:"
+
+msgid "rest.antenna.setting.calibration.error"
+msgstr "Error setting calibration:"
+
+msgid "rest.antenna.resetting.calibration.error"
+msgstr "Error resetting calibration:"
+
+msgid "rest.antenna.wrong.axis"
+msgstr "Axis must be 'azimuth' or 'elevation'."
+
+msgid "rest.antenna.axis.move.error"
+msgstr "Axis move error:"
+
+msgid "rest.antenna.controller.is.not.initialized.error"
+msgstr "Antenna controller is not initialized. Use /connect."
+
+msgid "rest.antenna.controller.is.not.configured.error"
+msgstr "Astronomical calculator is not configured. Set observer location."
+
+msgid "rest.antenna.tracker.is.not.configured.error"
+msgstr "Astronomical tracker is not configured. Set observer location."
+
+msgid "rest.antenna.objects.need.coordinates.error"
+msgstr "Tracking custom objects requires coordinates."

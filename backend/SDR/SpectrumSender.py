@@ -21,7 +21,8 @@ class SpectrumSender:
             return float(variable)
         except (TypeError, ValueError) as e:
             self.__logger.warning(f"Conversion to float failed for value: {variable} ({e})")
-            raise ValueError(f"{self._("spectrum.scanner.convertion.to.float.error")} {variable} ({e})")
+            error_msg = self._("spectrum.scanner.convertion.to.float.error")
+            raise ValueError(f"{error_msg}: {variable} ({e})")
 
     def send(self):
         self.__sdr.setSampleRate(SoapySDR.SOAPY_SDR_TX, 0, self.__sample_rate)

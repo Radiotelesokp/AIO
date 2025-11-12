@@ -32,6 +32,8 @@ class EngineServiceRest:
     def __init__(self, languageHelper: LanguageHelper):
         self.__languageHelper = languageHelper
         self._ = self.__languageHelper.getTranslatedMessage("Antenna")
+        self.__antenna_factory = AntennaControllerFactory(languageHelper)
+        self.__antennaControllerService = AntennaControllerService(languageHelper)
 
 
     def emergency_stop(self, port=DEFAULT_SPID_PORT, speed: int = DEFAULT_BAUDRATE) -> bool:
@@ -91,7 +93,7 @@ class EngineServiceRest:
         try:
             if config.use_simulator:
                 self.__logger.info("Connecting to simulator...")
-                self.__antenna_controller = AntennaControllerFactory.create_simulator_controller(
+                self.__antenna_controller = self.__antenna_factory.create_simulator_controller(
                     simulation_speed=2000.0, motor_config=MotorConfig())
                 self.__current_port = "Simulator"
             else:
@@ -103,7 +105,7 @@ class EngineServiceRest:
                     self.__logger.info(f"Selected port: {port}.")
 
                 self.__logger.info(f"Connecting to port {port}...")
-                self.__antenna_controller = AntennaControllerFactory.create_spid_controller(
+                self.__antenna_controller = self.__antenna_factory.create_spid_controller(
                     port=port, baudrate=config.baudrate, motor_config=MotorConfig())
                 self.__current_port = port
 

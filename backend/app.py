@@ -149,6 +149,8 @@ if __name__ == '__main__':
         sdrService = SDRService(sdr = sdr, languageHelper=languageHelper)
 
     except Exception as ex:
-        sys.exit(f"Connection error with SDR: {ex}")
+        logger.warning(f"Connection error with SDR: {ex}")
+        logger.warning("SDR service will not be available. Starting without SDR support...")
+        # SDR endpoints will return errors if called, but the application will still run
 
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=False)

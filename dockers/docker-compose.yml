@@ -18,6 +18,8 @@ services:
       dockerfile: dockers/Dockerfile_frontend
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=https://${CODESPACE_NAME}-8000.${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN:-app.github.dev}
     depends_on:
       - database
 

@@ -22,21 +22,23 @@ class SDRService:
     def bias_tee_status(self):
         _ = self.__languageHelper.getTranslatedMessage("SDR")
         try:
-            return JSONResponse(status_code=200, content={"message": f"{_("bias.tee.get.success.message")}"
-                                                                     f" {self.__biasTee.getStatus()}"})
+            success_msg = _("bias.tee.get.success.message")
+            return JSONResponse(status_code=200, content={"message": f"{success_msg} {self.__biasTee.getStatus()}"})
         except Exception as ex:
-            return JSONResponse(status_code=410, content={"message": f"{_("bias.tee.get.error.message")} {ex}"})
+            error_msg = _("bias.tee.get.error.message")
+            return JSONResponse(status_code=410, content={"message": f"{error_msg}: {ex}"})
 
     def bias_tee_control(self, action):
         _ = self.__languageHelper.getTranslatedMessage("SDR")
         try:
             self.__biasTee.controlBiasTee(action)
-            return JSONResponse(status_code=200, content={"message": f"{_("bias.tee.set.success.message")}"
-                                                                     f" {self.__biasTee.getStatus()}"})
+            success_msg = _("bias.tee.set.success.message")
+            return JSONResponse(status_code=200, content={"message": f"{success_msg} {self.__biasTee.getStatus()}"})
         except ValueError as ex:
             return JSONResponse(status_code=410, content={"message": f"{str(ex)}"})
         except Exception as ex:
-            return JSONResponse(status_code=500, content={"message": f"{_("bias.tee.set.error.message")} {ex}"})
+            error_msg = _("bias.tee.set.error.message")
+            return JSONResponse(status_code=500, content={"message": f"{error_msg}: {ex}"})
 
     def scan_spectrum(self, start_freq, stop_freq, step_freq, sample_rate, gain, n_samples, channel):
         _ = self.__languageHelper.getTranslatedMessage("SDR")
@@ -53,10 +55,11 @@ class SDRService:
                                                           "zip_base64": zip_base64})
 
         except (TypeError, ValueError) as ex:
-            return JSONResponse(status_code=410, content={"message": f"{_("sdr.scan.value.error.message")} {ex}"})
+            error_msg = _("sdr.scan.value.error.message")
+            return JSONResponse(status_code=410, content={"message": f"{error_msg}: {ex}"})
         except Exception as ex:
-            return JSONResponse(status_code=500, content={"message": f"{_("sdr.scan.unexpected.error.message")}"
-                                                                     f" {str(ex)}"})
+            error_msg = _("sdr.scan.unexpected.error.message")
+            return JSONResponse(status_code=500, content={"message": f"{error_msg}: {str(ex)}"})
 
     def send_spectrum(self, center_freq, tone_freq, duration, sample_rate, gain):
         _ = self.__languageHelper.getTranslatedMessage("SDR")
@@ -66,12 +69,14 @@ class SDRService:
             self.__logger.info("Starting sending signal...")
             spectrumSender.send()
             self.__logger.info("Ending sending signal...")
-
-            return JSONResponse(status_code=200, content={f"{_("sdr.scan.success.message")}"})
+            
+            success_msg = _("sdr.scan.success.message")
+            return JSONResponse(status_code=200, content={"message": success_msg})
 
         except (TypeError, ValueError) as ex:
-            return JSONResponse(status_code=410, content={"message": f"{_("sdr.send.value.error.message")} {ex}"})
+            error_msg = _("sdr.send.value.error.message")
+            return JSONResponse(status_code=410, content={"message": f"{error_msg}: {ex}"})
 
         except Exception as ex:
-            return JSONResponse(status_code=500, content={"message": f"{_("sdr.send.unexpected.error.message")}"
-                                                                     f" {str(ex)}"})
+            error_msg = _("sdr.send.unexpected.error.message")
+            return JSONResponse(status_code=500, content={"message": f"{error_msg}: {str(ex)}"})

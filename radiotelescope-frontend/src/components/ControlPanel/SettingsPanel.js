@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import "./SettingsPanel.scss";
 
 export default function SettingsPanel({ log }) {
-  const API_BASE = "http://localhost:8000";
+  const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8000";
   const [port, setPort] = useState("");
   const [simulatorMode, setSimulatorMode] = useState(false);
   const [azimuth, setAzimuth] = useState(0);

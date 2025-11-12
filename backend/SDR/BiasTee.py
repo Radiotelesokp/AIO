@@ -15,4 +15,5 @@ class BiasTee:
             self.__sdr.writeSetting("bias_tx", "false")
         else:
             _ = self.__languageHelper.getTranslatedMessage("SDR")
-            raise ValueError(f"{_("bias.tee.unsupported.action")} '{action}'")
+            error_msg = _("bias.tee.unsupported.action")
+            raise ValueError(f"{error_msg}: '{action}'")

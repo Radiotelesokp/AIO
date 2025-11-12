@@ -28,14 +28,16 @@ class SpectrumScanner:
             return float(variable)
         except (TypeError, ValueError) as e:
             self.__logger.warning(f"Conversion to float failed for value: {variable} ({e})")
-            raise ValueError(f"{self._("spectrum.scanner.convertion.to.float.error")} {variable} ({e})")
+            error_msg = self._("spectrum.scanner.convertion.to.float.error")
+            raise ValueError(f"{error_msg}: {variable} ({e})")
 
     def __convertStrToInt(self, variable: str) -> int:
         try:
             return int(variable)
         except (TypeError, ValueError) as e:
             self.__logger.warning(f"Conversion to int failed for value: {variable} ({e})")
-            raise ValueError(f"{self._("spectrum.scanner.convertion.to.float.error")} {variable} ({e})")
+            error_msg = self._("spectrum.scanner.convertion.to.float.error")
+            raise ValueError(f"{error_msg}: {variable} ({e})")
 
     # Scan one frequency of spectrum
     def __getSimpleFrequency(self, freq):
@@ -106,8 +108,8 @@ class SpectrumScanner:
         max_file = f"max_{prefix}.csv"
         mean_file = f"mean_{prefix}.csv"
         if not os.path.exists(max_file) or not os.path.exists(mean_file):
-            raise ValueError(f"{self._("spectrum.scanner.files.dont.error")
-                             .format(max_file=max_file, mean_file= mean_file)}{max_file}")
+            error_msg = self._("spectrum.scanner.files.dont.error")
+            raise ValueError(f"{error_msg.format(max_file=max_file, mean_file=mean_file)}: {max_file}")
 
         df_max = pd.read_csv(max_file)
         df_mean = pd.read_csv(mean_file)

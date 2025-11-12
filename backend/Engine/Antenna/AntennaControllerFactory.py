@@ -36,12 +36,12 @@ class AntennaControllerFactory:
 
         return AntennaController(motor_driver, motor_config, self.__languageHelper, limits, calibration_file=calibration_file)
 
-    def create_simulator_controller(self, languageHelper, simulation_speed: float = 1000.0,
+    def create_simulator_controller(self, simulation_speed: float = 1000.0,
                                     motor_config: Optional[MotorConfig] = None, limits: Optional[AntennaLimits] = None,
                                     calibration_file: str = DEFAULT_CALIBRATION_FILE) -> AntennaController:
         """Creates a controller using a simulator."""
 
-        motor_driver = SimulatedMotorDriver(languageHelper, simulation_speed)
+        motor_driver = SimulatedMotorDriver(self.__languageHelper, simulation_speed)
         motor_config = motor_config or MotorConfig()
 
-        return AntennaController(motor_driver, motor_config, languageHelper, limits, calibration_file=calibration_file)
+        return AntennaController(motor_driver, motor_config, self.__languageHelper, limits, calibration_file=calibration_file)
